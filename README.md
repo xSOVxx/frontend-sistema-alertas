@@ -90,7 +90,7 @@ src/app/
 stitch/                   # HTML de referencia extraído de Stitch (MCP)
 ```
 
-Para más detalle sobre las prácticas del proyecto, ver las skills en `.opencode/skills/`.
+Para más detalle sobre las prácticas del proyecto, ver las skills en `.agents/skills/`.
 
 ## Recursos
 
