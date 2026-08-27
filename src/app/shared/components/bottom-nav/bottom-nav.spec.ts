@@ -1,33 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { Router, provideRouter } from '@angular/router';
-import { NavBottom } from './nav';
+import { BottomNav } from './bottom-nav';
 
 @Component({ template: '' })
 class Dummy {}
 
-describe('NavBottom', () => {
+describe('BottomNav', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavBottom],
+      imports: [BottomNav],
       providers: [provideRouter([{ path: 'mapa', component: Dummy }])]
     }).compileComponents();
   });
 
   it('should create the component', () => {
-    const fixture = TestBed.createComponent(NavBottom);
+    const fixture = TestBed.createComponent(BottomNav);
     expect(fixture.componentInstance).toBeTruthy();
   });
 
   it('should render four tabs', () => {
-    const fixture = TestBed.createComponent(NavBottom);
+    const fixture = TestBed.createComponent(BottomNav);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelectorAll('.nav-btn').length).toBe(4);
   });
 
   it('should disable the Perfil tab', () => {
-    const fixture = TestBed.createComponent(NavBottom);
+    const fixture = TestBed.createComponent(BottomNav);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const buttons = compiled.querySelectorAll<HTMLButtonElement>('button.nav-btn');
@@ -37,7 +37,7 @@ describe('NavBottom', () => {
   });
 
   it('should link to the correct routes', () => {
-    const fixture = TestBed.createComponent(NavBottom);
+    const fixture = TestBed.createComponent(BottomNav);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const anchors = compiled.querySelectorAll<HTMLAnchorElement>('a.nav-btn');
@@ -47,7 +47,7 @@ describe('NavBottom', () => {
   });
 
   it('should mark the active route', async () => {
-    const fixture = TestBed.createComponent(NavBottom);
+    const fixture = TestBed.createComponent(BottomNav);
     fixture.detectChanges();
     const router = TestBed.inject(Router);
     await router.navigate(['/mapa']);

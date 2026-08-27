@@ -9,12 +9,12 @@ interface NavItem {
 }
 
 @Component({
-  selector: 'app-nav-bottom',
+  selector: 'app-bottom-nav',
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './nav.html',
-  styleUrl: './nav.css'
+  templateUrl: './bottom-nav.html',
+  styleUrl: './bottom-nav.css'
 })
-export class NavBottom {
+export class BottomNav {
   protected readonly items = signal<NavItem[]>([
     { icon: 'newspaper', label: 'Noticias', route: '/feed', disabled: false },
     { icon: 'map', label: 'Mapa', route: '/mapa', disabled: false },

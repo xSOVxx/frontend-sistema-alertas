@@ -1,13 +1,12 @@
 <div class="page">
-  <header class="topbar">
-    <button class="topbar-btn" type="button" aria-label="Estado de conexión">
+  <app-topbar title="PonteAlerta Piura">
+    <button topbar-left class="topbar-btn" type="button" aria-label="Estado de conexión">
       <span class="material-symbols-outlined">signal_wifi_4_bar</span>
     </button>
-    <h1 class="topbar-title">PonteAlerta Piura</h1>
-    <button class="topbar-btn" type="button" aria-label="Cuenta">
+    <button topbar-right class="avatar-btn" type="button" aria-label="Cuenta">
       <span class="material-symbols-outlined">account_circle</span>
     </button>
-  </header>
+  </app-topbar>
 
   <div class="offline-bar">
     <span class="material-symbols-outlined filled">cloud_off</span>
@@ -67,5 +66,5 @@
     </button>
   </main>
 
-  <app-nav-bottom />
+  <app-bottom-nav />
 </div>

@@ -1,17 +1,16 @@
 <div class="page">
-  <header class="topbar">
-    <div class="sync-chip">
+  <app-topbar title="PonteAlerta Piura">
+    <div topbar-left class="sync-chip">
       <span class="material-symbols-outlined filled">signal_wifi_4_bar</span>
       <span class="sync-label">
         <span class="sync-dot"></span>
         Sincronizado
       </span>
     </div>
-    <div class="topbar-title">PonteAlerta Piura</div>
-    <button class="avatar-btn" type="button" aria-label="Cuenta">
+    <button topbar-right class="avatar-btn" type="button" aria-label="Cuenta">
       <span class="material-symbols-outlined">account_circle</span>
     </button>
-  </header>
+  </app-topbar>
 
   <main class="main">
     <section class="header">
@@ -139,5 +138,5 @@
     </div>
   </main>
 
-  <app-nav-bottom />
+  <app-bottom-nav />
 </div>

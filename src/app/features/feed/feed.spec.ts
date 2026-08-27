@@ -19,7 +19,7 @@ describe('Feed', () => {
     const fixture = TestBed.createComponent(Feed);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.topbar-title')?.textContent).toContain('PonteAlerta Piura');
+    expect(compiled.querySelector('.topbar-brand')?.textContent).toContain('PonteAlerta Piura');
   });
 
   it('should render three alert cards', () => {
@@ -45,6 +45,6 @@ describe('Feed', () => {
     const fixture = TestBed.createComponent(Feed);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-nav-bottom')).toBeTruthy();
+    expect(compiled.querySelector('app-bottom-nav')).toBeTruthy();
   });
 });

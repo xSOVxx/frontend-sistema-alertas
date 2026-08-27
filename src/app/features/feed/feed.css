@@ -14,7 +14,6 @@
   line-height: 24px;
 }
 
-.topbar,
 .search-input,
 .filter-btn,
 .card,
@@ -22,45 +21,18 @@
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px;
-  padding: 0 16px;
-  background: var(--surface);
-  color: var(--primary);
-  border-bottom: 1px solid var(--outline-variant);
-}
-
-.topbar-title {
+.topbar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 20px;
-  line-height: 28px;
+  line-height:28px;
   font-weight: 700;
+  color: var(--primary);
 }
 
-.topbar-title .material-symbols-outlined {
+.topbar-brand .material-symbols-outlined {
   color: var(--on-surface-variant);
-}
-
-.avatar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: none;
-  border: none;
-  border-radius: 12px;
-  color: var(--on-surface-variant);
-  cursor: pointer;
-}
-
-.avatar-btn:hover {
-  background: var(--surface-container-low);
 }
 
 .sync-bar {

@@ -48,6 +48,6 @@ describe('Voluntariado', () => {
     const fixture = TestBed.createComponent(Voluntariado);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-nav-bottom')).toBeTruthy();
+    expect(compiled.querySelector('app-bottom-nav')).toBeTruthy();
   });
 });

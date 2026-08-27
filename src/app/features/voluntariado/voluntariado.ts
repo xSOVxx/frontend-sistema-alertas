@@ -1,6 +1,7 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NavBottom } from '../nav/nav';
+import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
+import { Topbar } from '../../shared/components/topbar/topbar';
 
 type SubmitState = 'idle' | 'processing' | 'done';
 
@@ -20,7 +21,7 @@ interface GoalItem {
 
 @Component({
   selector: 'app-voluntariado',
-  imports: [ReactiveFormsModule, NavBottom],
+  imports: [ReactiveFormsModule, BottomNav, Topbar],
   templateUrl: './voluntariado.html',
   styleUrl: './voluntariado.css'
 })

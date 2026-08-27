@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
-import { NavBottom } from '../nav/nav';
+import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
+import { Topbar } from '../../shared/components/topbar/topbar';
 
 interface AlertItem {
   kind: 'roja' | 'precaucion' | 'informacion';
@@ -15,7 +16,7 @@ interface AlertItem {
 
 @Component({
   selector: 'app-feed',
-  imports: [NavBottom],
+  imports: [BottomNav, Topbar],
   templateUrl: './feed.html',
   styleUrl: './feed.css'
 })

@@ -1,7 +1,8 @@
 import { Component, DestroyRef, ElementRef, ViewChild, afterNextRender, inject, signal } from '@angular/core';
 import type * as maplibregl from 'maplibre-gl';
-import { NavBottom } from '../nav/nav';
-import { environment } from '../../environments/environment';
+import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
+import { Topbar } from '../../shared/components/topbar/topbar';
+import { environment } from '../../../environments/environment';
 
 type StyleKind = 'base' | 'satellite';
 
@@ -24,7 +25,7 @@ interface FloodZone {
 
 @Component({
   selector: 'app-mapa',
-  imports: [NavBottom],
+  imports: [BottomNav, Topbar],
   templateUrl: './mapa.html',
   styleUrl: './mapa.css'
 })

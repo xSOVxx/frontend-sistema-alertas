@@ -34,6 +34,6 @@ describe('Mapa', () => {
     const fixture = TestBed.createComponent(Mapa);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-nav-bottom')).toBeTruthy();
+    expect(compiled.querySelector('app-bottom-nav')).toBeTruthy();
   });
 });

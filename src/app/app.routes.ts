@@ -1,13 +1,21 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Feed } from './feed/feed';
-import { Mapa } from './mapa/mapa';
-import { Voluntariado } from './voluntariado/voluntariado';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'feed', component: Feed },
-  { path: 'mapa', component: Mapa },
-  { path: 'voluntariado', component: Voluntariado }
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login)
+  },
+  {
+    path: 'feed',
+    loadComponent: () => import('./features/feed/feed').then((m) => m.Feed)
+  },
+  {
+    path: 'mapa',
+    loadComponent: () => import('./features/mapa/mapa').then((m) => m.Mapa)
+  },
+  {
+    path: 'voluntariado',
+    loadComponent: () => import('./features/voluntariado/voluntariado').then((m) => m.Voluntariado)
+  }
 ];
