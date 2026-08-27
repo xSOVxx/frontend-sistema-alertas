@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>PonteAlerta Piura - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed-dim": "#aec7f7",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-container-highest": "#dce3ec",
+                        "secondary": "#5c5f60",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "secondary-fixed": "#e1e3e4",
+                        "primary-container": "#1b365d",
+                        "on-tertiary-container": "#ff7361",
+                        "inverse-primary": "#aec7f7",
+                        "on-background": "#151c22",
+                        "on-surface": "#151c22",
+                        "surface-bright": "#f6f9ff",
+                        "primary": "#002046",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#87a0cd",
+                        "outline-variant": "#c4c6cf",
+                        "on-surface-variant": "#44474e",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#eef4fd",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e2e9f1",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001b3d",
+                        "surface-dim": "#d4dbe3",
+                        "inverse-on-surface": "#ebf1fa",
+                        "on-secondary-fixed-variant": "#454748",
+                        "surface-variant": "#dce3ec",
+                        "tertiary-fixed": "#ffdad5",
+                        "background": "#f6f9ff",
+                        "surface-container": "#e8eef7",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#c5c7c8",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#8e130c",
+                        "inverse-surface": "#2a3138",
+                        "on-secondary-fixed": "#191c1d",
+                        "on-primary-fixed-variant": "#2e476f",
+                        "tertiary": "#4b0000",
+                        "outline": "#74777f",
+                        "on-tertiary-fixed": "#410000",
+                        "on-secondary-container": "#626566",
+                        "surface-tint": "#465f88",
+                        "surface": "#f6f9ff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#e1e3e4",
+                        "tertiary-container": "#730001"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "xl": "32px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "sm": "8px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "xs": "4px"
+                    },
+                    fontFamily: {
+                        "label-bold": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-mono": ["Courier Prime"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "code-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .pt-safe { padding-top: env(safe-area-inset-top); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen flex flex-col pt-safe pb-safe overflow-hidden">
+<!-- Connectivity Status Bar (Level 0/1 overlay) -->
+<div class="w-full bg-surface-container-low px-4 py-2 flex items-center justify-between border-b border-outline-variant shadow-sm z-50">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sincronizado</span>
+</div>
+<span class="material-symbols-outlined text-green-600" data-icon="cloud_sync" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col justify-center px-margin-mobile max-w-md mx-auto w-full relative z-10">
+<!-- Header / Logo Area -->
+<div class="text-center mb-10 flex flex-col items-center">
+<div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-6 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="shield_with_house" style="font-variation-settings: 'FILL' 1;">shield_with_house</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2 tracking-tight">PonteAlerta Piura</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Sistema de Gestión de Emergencias</p>
+</div>
+<!-- Login Form Card (Level 1) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant p-6 relative overflow-hidden">
+<!-- Urgency Stripe (decorative, structural logic applied) -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<form action="#" class="flex flex-col gap-5 relative z-10" method="POST">
+<!-- Email Field -->
+<div>
+<label class="block font-label-bold text-label-bold text-on-surface mb-2" for="email">Usuario / Correo Electrónico</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="person">person</span>
+</span>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-outline-variant rounded-lg text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:border-primary transition-colors font-body-md text-body-md" id="email" name="email" placeholder="usuario@gob.pe" required="" type="email">
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block font-label-bold text-label-bold text-on-surface" for="password">Contraseña</label>
+</div>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="lock">lock</span>
+</span>
+<input class="block w-full pl-12 pr-12 py-4 bg-surface-container-low border-outline-variant rounded-lg text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:border-primary transition-colors font-body-md text-body-md" id="password" name="password" placeholder="••••••••" required="" type="password">
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-2 flex flex-col gap-4">
+<button class="w-full bg-primary-container text-on-primary hover:bg-primary transition-colors duration-200 py-4 rounded-lg font-label-bold text-label-bold flex justify-center items-center gap-2 shadow-sm active:scale-[0.98]" type="submit">
+                        Ingresar
+                        <span class="material-symbols-outlined text-on-primary text-sm" data-icon="login">login</span>
+</button>
+<a class="text-center font-label-bold text-label-bold text-primary hover:text-primary-fixed-dim transition-colors" href="#">
+                        Olvidé mi contraseña
+                    </a>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-6 text-center bg-surface border-t border-outline-variant px-margin-mobile">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-outline" data-icon="account_balance">account_balance</span>
+<p class="font-label-sm text-label-sm text-outline-variant">
+                Gobierno Regional de Piura<br>
+                COER - Centro de Operaciones de Emergencia Regional
+            </p>
+</div>
+</footer>
+
+
+</body></html>

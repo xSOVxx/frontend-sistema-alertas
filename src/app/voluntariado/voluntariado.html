@@ -1,0 +1,143 @@
+<div class="page">
+  <header class="topbar">
+    <div class="sync-chip">
+      <span class="material-symbols-outlined filled">signal_wifi_4_bar</span>
+      <span class="sync-label">
+        <span class="sync-dot"></span>
+        Sincronizado
+      </span>
+    </div>
+    <div class="topbar-title">PonteAlerta Piura</div>
+    <button class="avatar-btn" type="button" aria-label="Cuenta">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </header>
+
+  <main class="main">
+    <section class="header">
+      <h1 class="title">Voluntariado y Donaciones</h1>
+      <p class="subtitle">Gestione recursos y personal para emergencias activas en la región.</p>
+    </section>
+
+    <div class="bento">
+      <section class="card form-card">
+        <div class="card-head">
+          <span class="material-symbols-outlined card-icon">person_add</span>
+          <h2 class="card-title">Registro de Voluntarios</h2>
+        </div>
+
+        <form class="form" [formGroup]="voluntarioForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="field">
+            <label class="field-label" for="nombre">Nombre Completo</label>
+            <input id="nombre" type="text" formControlName="nombre" placeholder="Ej. Juan Pérez" />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="dni">DNI / Documento</label>
+            <input id="dni" type="tel" formControlName="dni" placeholder="Ej. 12345678" />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="habilidad">Habilidad / Disponibilidad</label>
+            <select id="habilidad" formControlName="habilidad">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="medico">Atención Médica Primaria</option>
+              <option value="logistica">Logística y Distribución</option>
+              <option value="rescate">Búsqueda y Rescate</option>
+              <option value="apoyo">Apoyo General</option>
+            </select>
+          </div>
+
+          <div class="field-actions">
+            <button
+              class="submit"
+              type="submit"
+              [disabled]="voluntarioForm.invalid"
+              [class.submit--processing]="submitState() === 'processing'"
+              [class.submit--done]="submitState() === 'done'"
+            >
+              <span
+                class="material-symbols-outlined"
+                [class.spin]="submitState() === 'processing'"
+                [class.filled]="submitState() === 'done'"
+              >
+                {{ submitIcon() }}
+              </span>
+              {{ submitLabel() }}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <div class="right-col">
+        <section class="card">
+          <div class="card-head card-head--row">
+            <div class="card-head-group">
+              <span class="material-symbols-outlined card-icon">inventory_2</span>
+              <h2 class="card-title">Control de Ayuda Humanitaria</h2>
+            </div>
+            <button class="refresh-btn" type="button" aria-label="Actualizar" (click)="refreshStock()">
+              <span class="material-symbols-outlined" [class.spin]="refreshing()">sync</span>
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Recurso</th>
+                  <th>Stock Actual</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of stockItems(); track item.name) {
+                  <tr>
+                    <td class="resource-cell">
+                      <span class="material-symbols-outlined resource-icon">{{ item.icon }}</span>
+                      {{ item.name }}
+                    </td>
+                    <td>{{ item.stock }}</td>
+                    <td>
+                      <span class="badge" [class]="'badge--' + item.status">
+                        <span class="badge-dot"></span>
+                        {{ item.status === 'adecuado' ? 'Adecuado' : item.status === 'critico' ? 'Crítico' : 'Agotado' }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <span class="material-symbols-outlined card-icon">monitoring</span>
+            <h2 class="card-title">Metas de Recaudación</h2>
+          </div>
+
+          <div class="goals">
+            @for (goal of goals(); track goal.label) {
+              <div class="goal">
+                <div class="goal-row">
+                  <span class="goal-label">{{ goal.label }}</span>
+                  <span class="goal-mono">{{ goal.mono }}</span>
+                </div>
+                <div class="goal-track">
+                  <div
+                    class="goal-fill"
+                    [style.width.%]="goal.percent"
+                    [style.background]="goal.color"
+                  ></div>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <app-nav-bottom />
+</div>

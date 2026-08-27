@@ -1,0 +1,358 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.topbar,
+.search-input,
+.filter-btn,
+.card,
+.kind-roja .card-action {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  background: var(--surface);
+  color: var(--primary);
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.topbar-title .material-symbols-outlined {
+  color: var(--on-surface-variant);
+}
+
+.avatar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 12px;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+}
+
+.avatar-btn:hover {
+  background: var(--surface-container-low);
+}
+
+.sync-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--surface-container-high);
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.sync-bar .material-symbols-outlined {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.sync-label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--on-surface-variant);
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 16px;
+}
+
+.search-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -24px -16px 0;
+  padding: 8px 16px;
+  background: rgb(246 249 255 / 90%);
+  backdrop-filter: blur(12px);
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--on-surface-variant);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 48px;
+  background: var(--surface-container);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font: inherit;
+  color: var(--on-surface);
+  transition: 0.2s;
+}
+
+.search-input::placeholder {
+  color: var(--on-surface-variant);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-fixed-dim);
+  background: var(--surface-container-lowest);
+  box-shadow: 0 0 0 4px rgb(214 227 255 / 20%);
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: var(--surface-container-high);
+}
+
+.filter-btn:active {
+  transform: scale(0.95);
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  transition: transform 0.15s;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+.card-stripe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+}
+
+.card-body {
+  padding: 16px 16px 16px 20px;
+}
+
+.card-body--image {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card-kind {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-kind .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.card-kind-label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.card-time {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+}
+
+.card-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.card-body--image .card-title {
+  margin: 0;
+}
+
+.card-desc {
+  margin: 0 0 20px;
+  color: var(--on-surface-variant);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-image {
+  height: 128px;
+  overflow: hidden;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.card-actions--mt {
+  margin-top: 8px;
+}
+
+.card-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.card-action .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.kind-roja .card-kind {
+  color: var(--error);
+}
+
+.kind-roja .card-stripe {
+  background: var(--error);
+}
+
+.kind-roja .card-action {
+  background: var(--error);
+  color: var(--on-error);
+}
+
+.kind-roja .card-action:active {
+  background: var(--on-error-container);
+}
+
+.kind-precaucion .card-kind {
+  color: var(--on-tertiary-container);
+}
+
+.kind-precaucion .card-stripe {
+  background: var(--on-tertiary-container);
+}
+
+.kind-precaucion .card-action {
+  background: transparent;
+  border: 2px solid var(--primary-container);
+  color: var(--primary-container);
+}
+
+.kind-precaucion .card-action:hover {
+  background: var(--surface-container-low);
+}
+
+.kind-informacion .card-kind {
+  color: var(--surface-tint);
+}
+
+.kind-informacion .card-stripe {
+  background: var(--surface-tint);
+}
+
+.kind-informacion .card-action {
+  background: transparent;
+  border: 2px solid var(--outline);
+  color: var(--on-surface-variant);
+}
+
+.kind-informacion .card-action:hover {
+  background: var(--surface-container-low);
+}
+
+.empty {
+  text-align: center;
+  color: var(--on-surface-variant);
+}

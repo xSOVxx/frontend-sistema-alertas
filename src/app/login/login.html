@@ -1,0 +1,85 @@
+<div class="page">
+  <div class="status-bar">
+    <div class="status-left">
+      <span class="dot"></span>
+      <span class="status-label">Sincronizado</span>
+    </div>
+    <span class="material-symbols-outlined status-icon filled">cloud_sync</span>
+  </div>
+
+  <main class="main">
+    <div class="header">
+      <div class="logo">
+        <span class="material-symbols-outlined filled">shield_with_house</span>
+      </div>
+      <h1 class="title">PonteAlerta Piura</h1>
+      <p class="subtitle">Sistema de Gestión de Emergencias</p>
+    </div>
+
+    <div class="card">
+      <div class="stripe"></div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        <div>
+          <label class="field-label" for="email">Usuario / Correo Electrónico</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <span class="material-symbols-outlined">person</span>
+            </span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="usuario@gob.pe"
+              autocomplete="username"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="password">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <span class="material-symbols-outlined">lock</span>
+            </span>
+            <input
+              id="password"
+              class="password-input"
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+            <button
+              class="toggle-btn"
+              type="button"
+              aria-label="Mostrar u ocultar contraseña"
+              (click)="togglePassword()"
+            >
+              <span class="material-symbols-outlined">
+                {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="submit" type="submit" [disabled]="loginForm.invalid">
+            Ingresar
+            <span class="material-symbols-outlined filled">login</span>
+          </button>
+          <a class="forgot" href="#">Olvidé mi contraseña</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="material-symbols-outlined footer-icon">account_balance</span>
+      <p class="footer-text">
+        Gobierno Regional de Piura<br />
+        COER - Centro de Operaciones de Emergencia Regional
+      </p>
+    </div>
+  </footer>
+</div>

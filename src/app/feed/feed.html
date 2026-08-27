@@ -1,0 +1,74 @@
+<div class="page">
+  <header class="topbar">
+    <div class="topbar-title">
+      <span class="material-symbols-outlined">signal_wifi_4_bar</span>
+      <span>PonteAlerta Piura</span>
+    </div>
+    <button class="avatar-btn" type="button" aria-label="Cuenta">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </header>
+
+  <div class="sync-bar">
+    <span class="material-symbols-outlined spin">sync</span>
+    <span class="sync-label">Sincronizando...</span>
+  </div>
+
+  <main class="main">
+    <section class="search-bar">
+      <div class="search-wrap">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input
+          class="search-input"
+          type="text"
+          placeholder="Buscar alertas y refugios..."
+          (input)="onSearch($event)"
+        />
+      </div>
+      <button class="filter-btn" type="button" aria-label="Filtrar">
+        <span class="material-symbols-outlined">filter_list</span>
+      </button>
+    </section>
+
+    <section class="feed">
+      @for (alert of filteredAlerts(); track alert.title) {
+        <article
+          class="card"
+          [class.kind-roja]="alert.kind === 'roja'"
+          [class.kind-precaucion]="alert.kind === 'precaucion'"
+          [class.kind-informacion]="alert.kind === 'informacion'"
+        >
+          <div class="card-stripe"></div>
+          <div class="card-body" [class.card-body--image]="!!alert.image">
+            <div class="card-head">
+              <div class="card-kind">
+                <span class="material-symbols-outlined filled">{{ alert.icon }}</span>
+                <span class="card-kind-label">{{ alert.label }}</span>
+              </div>
+              <span class="card-time">{{ alert.time }}</span>
+            </div>
+            <h3 class="card-title">{{ alert.title }}</h3>
+            @if (alert.image) {
+              <div class="card-image">
+                <img [src]="alert.image" [alt]="alert.title" />
+              </div>
+            }
+            @if (alert.description) {
+              <p class="card-desc">{{ alert.description }}</p>
+            }
+            <div class="card-actions" [class.card-actions--mt]="!!alert.image">
+              <button class="card-action" type="button">
+                <span class="material-symbols-outlined filled">{{ alert.actionIcon }}</span>
+                {{ alert.actionLabel }}
+              </button>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty">No se encontraron alertas.</p>
+      }
+    </section>
+  </main>
+
+  <app-nav-bottom />
+</div>

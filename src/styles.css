@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+:root {
+  --primary: #002046;
+  --primary-container: #1b365d;
+  --primary-fixed: #d6e3ff;
+  --primary-fixed-dim: #aec7f7;
+  --on-primary: #ffffff;
+  --on-primary-container: #87a0cd;
+  --on-primary-fixed: #001b3d;
+  --on-primary-fixed-variant: #2e476f;
+  --surface: #f6f9ff;
+  --surface-bright: #f6f9ff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eef4fd;
+  --surface-container: #e8eef7;
+  --surface-container-high: #e2e9f1;
+  --surface-container-highest: #dce3ec;
+  --surface-variant: #dce3ec;
+  --surface-dim: #d4dbe3;
+  --on-surface: #151c22;
+  --on-surface-variant: #44474e;
+  --background: #f6f9ff;
+  --on-background: #151c22;
+  --outline: #74777f;
+  --outline-variant: #c4c6cf;
+  --secondary: #5c5f60;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --tertiary: #4b0000;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #730001;
+  --on-tertiary-container: #ff7361;
+  --surface-tint: #465f88;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  line-height: 1;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.filled {
+  font-variation-settings: 'FILL' 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}

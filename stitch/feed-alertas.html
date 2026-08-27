@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>MantenteAlerta Piura - Noticias</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#aec7f7",
+                    "primary-fixed": "#d6e3ff",
+                    "surface-container-highest": "#dce3ec",
+                    "secondary": "#5c5f60",
+                    "tertiary-fixed-dim": "#ffb4a9",
+                    "secondary-fixed": "#e1e3e4",
+                    "primary-container": "#1b365d",
+                    "on-tertiary-container": "#ff7361",
+                    "inverse-primary": "#aec7f7",
+                    "on-background": "#151c22",
+                    "on-surface": "#151c22",
+                    "surface-bright": "#f6f9ff",
+                    "primary": "#002046",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#87a0cd",
+                    "outline-variant": "#c4c6cf",
+                    "on-surface-variant": "#44474e",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#eef4fd",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e2e9f1",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#001b3d",
+                    "surface-dim": "#d4dbe3",
+                    "inverse-on-surface": "#ebf1fa",
+                    "on-secondary-fixed-variant": "#454748",
+                    "surface-variant": "#dce3ec",
+                    "tertiary-fixed": "#ffdad5",
+                    "background": "#f6f9ff",
+                    "surface-container": "#e8eef7",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#c5c7c8",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#8e130c",
+                    "inverse-surface": "#2a3138",
+                    "on-secondary-fixed": "#191c1d",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "tertiary": "#4b0000",
+                    "outline": "#74777f",
+                    "on-tertiary-fixed": "#410000",
+                    "on-secondary-container": "#626566",
+                    "surface-tint": "#465f88",
+                    "surface": "#f6f9ff",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#e1e3e4",
+                    "tertiary-container": "#730001"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "base": "4px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "sm": "8px",
+                    "margin-desktop": "48px",
+                    "margin-mobile": "16px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "code-mono": ["Courier Prime"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "code-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Safe area padding for mobile PWA */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .pt-safe { padding-top: env(safe-area-inset-top); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary font-headline-md text-headline-md font-bold shadow-sm border-b border-outline-variant fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-16 transition-colors duration-200 ease-in-out pt-safe">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">signal_wifi_4_bar</span>
+<span class="">PonteAlerta Piura</span>
+</div>
+<button class="flex items-center justify-center h-10 w-10 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">account_circle</span>
+</button>
+</header>
+<!-- Connectivity Status Indicator -->
+<div class="fixed top-[calc(4rem+env(safe-area-inset-top))] left-0 w-full bg-surface-container-high border-b border-outline-variant z-40 px-4 py-1.5 flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant animate-spin">sync</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sincronizando...</span>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-4 pt-[calc(6rem+env(safe-area-inset-top))] pb-[calc(6rem+env(safe-area-inset-bottom))] flex flex-col gap-6">
+<!-- Search & Filter Section -->
+<section class="flex gap-2 items-center sticky top-[calc(6rem+env(safe-area-inset-top))] z-30 bg-background/90 backdrop-blur-md py-2 -mx-4 px-4">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container rounded-full py-3 pl-12 pr-4 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant border border-transparent focus:border-primary-fixed-dim focus:bg-surface-container-lowest focus:outline-none focus:ring-4 focus:ring-primary-fixed/20 transition-all shadow-sm" placeholder="Buscar alertas y refugios..." type="text">
+</div>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0 shadow-sm hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</section>
+<!-- Feed Section -->
+<section class="flex flex-col gap-4">
+<!-- Red Alert Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm relative overflow-hidden flex flex-col transition-transform active:scale-[0.98]">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="p-4 pl-5">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-1.5 text-error">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-bold text-label-bold uppercase tracking-wide">Alerta Roja</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hace 2 min</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 leading-tight">Inundación en el Bajo Piura - Evacuación inmediata</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-5 line-clamp-3">Los niveles del río han superado la cota de desborde. Se requiere evacuación inmediata de todos los residentes hacia las zonas altas designadas en el plan de emergencia.</p>
+<div class="flex gap-3">
+<button class="flex-1 bg-error text-on-error font-label-bold text-label-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm active:bg-on-error-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">directions_run</span>
+                            Rutas Evacuación
+                        </button>
+</div>
+</div>
+</article>
+<!-- Orange Alert Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm relative overflow-hidden flex flex-col transition-transform active:scale-[0.98]">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<div class="p-4 pl-5 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-1.5 text-on-tertiary-container">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">construction</span>
+<span class="font-label-bold text-label-bold uppercase tracking-wide">Precaución</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hace 15 min</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Vía Piura-Chulucanas cerrada por desprendimiento</h3>
+<div class="w-full h-32 rounded-lg overflow-hidden bg-surface-container relative border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A highly detailed top-down view of a modern digital map interface displaying a closed road section in a mountainous terrain. The map uses a sleek, light-mode corporate aesthetic with subtle topographical lines in soft gray over a pale off-white background. A prominent segmented line in stark, high-contrast orange highlights the blocked route, accented by small, clear alert icons. The overall mood is functional, urgent, and highly legible, emphasizing clear geographic data visualization." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC47dJGluxQMAcClgbmhrFgQjP0xj8LmUd46Bj5hnvNz14P8HyNMmMeQKErUhQMZ0rRLuvDMSZCwiCPu5gA7zDzBzeUONvrV_ZUtDFc-q7SGqJTK9HBw9uhtf2X03FKvILIeKD-3uEZ76deF1B8FOsGnaENZo8OTUMIqV3E88vo7wSNz95ROESfWS0f3jn0G1Mf_rR48iprvFKJqADW54yasT5q0gxyN44dPb4jyHkiY1cW4jNkt4zM">
+</div>
+<div class="flex gap-3 mt-2">
+<button class="flex-1 bg-transparent border-2 border-primary-container text-primary-container font-label-bold text-label-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">map</span>
+                            Ver Desvíos
+                        </button>
+</div>
+</div>
+</article>
+<!-- Green Info Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm relative overflow-hidden flex flex-col transition-transform active:scale-[0.98]">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint"></div>
+<div class="p-4 pl-5">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-1.5 text-surface-tint">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-bold text-label-bold uppercase tracking-wide">Información</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hace 1 hora</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 leading-tight">Refugio Colegio San Miguel habilitado</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">El centro educativo ha sido acondicionado con suministros básicos y camas temporales. Capacidad actual: 45%.</p>
+<div class="flex gap-3">
+<button class="flex-1 bg-transparent border-2 border-outline text-on-surface-variant font-label-bold text-label-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">directions</span>
+                            Cómo llegar
+                        </button>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface text-primary font-label-sm text-label-sm border-t border-outline-variant shadow-lg fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 pb-safe px-2">
+<!-- Tab 1: Noticias (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 active:scale-95 transition-transform duration-150 gap-1 min-w-[64px]">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">newspaper</span>
+<span class="font-label-sm text-label-sm mt-0.5">Noticias</span>
+</button>
+<!-- Tab 2: Mapa -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:text-primary hover:bg-surface-container-low rounded-full active:scale-95 transition-all duration-150 gap-1 min-w-[64px]">
+<span class="material-symbols-outlined text-[24px]">map</span>
+<span class="font-label-sm text-label-sm mt-0.5">Mapa</span>
+</button>
+<!-- Tab 3: Ayuda -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:text-primary hover:bg-surface-container-low rounded-full active:scale-95 transition-all duration-150 gap-1 min-w-[64px]">
+<span class="material-symbols-outlined text-[24px]">volunteer_activism</span>
+<span class="font-label-sm text-label-sm mt-0.5">Ayuda</span>
+</button>
+<!-- Tab 4: Perfil -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:text-primary hover:bg-surface-container-low rounded-full active:scale-95 transition-all duration-150 gap-1 min-w-[64px]">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="font-label-sm text-label-sm mt-0.5">Perfil</span>
+</button>
+</nav>
+
+
+</body></html>

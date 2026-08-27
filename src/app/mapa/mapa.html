@@ -1,0 +1,71 @@
+<div class="page">
+  <header class="topbar">
+    <button class="topbar-btn" type="button" aria-label="Estado de conexión">
+      <span class="material-symbols-outlined">signal_wifi_4_bar</span>
+    </button>
+    <h1 class="topbar-title">PonteAlerta Piura</h1>
+    <button class="topbar-btn" type="button" aria-label="Cuenta">
+      <span class="material-symbols-outlined">account_circle</span>
+    </button>
+  </header>
+
+  <div class="offline-bar">
+    <span class="material-symbols-outlined filled">cloud_off</span>
+    <span class="offline-label">Modo Offline - Guardando Localmente</span>
+  </div>
+
+  <main class="map-wrap">
+    <div #canvas class="map-canvas"></div>
+
+    @if (mapError()) {
+      <div class="map-error">
+        <span class="material-symbols-outlined">error_outline</span>
+        No se pudo cargar el mapa. Verifica tu conexión.
+      </div>
+    }
+
+    <div class="map-controls">
+      <button class="control-btn" type="button" aria-label="Mi ubicación" (click)="locate()">
+        <span class="material-symbols-outlined">my_location</span>
+      </button>
+      <div class="control-group">
+        <button class="control-btn" type="button" aria-label="Acercar" (click)="zoomIn()">
+          <span class="material-symbols-outlined">add</span>
+        </button>
+        <button class="control-btn" type="button" aria-label="Alejar" (click)="zoomOut()">
+          <span class="material-symbols-outlined">remove</span>
+        </button>
+      </div>
+      <button class="control-btn" type="button" aria-label="Capas" (click)="toggleLayer()">
+        <span class="material-symbols-outlined">layers</span>
+      </button>
+    </div>
+
+    <div class="legend">
+      <h3 class="legend-title">
+        <span class="material-symbols-outlined">info</span>
+        Leyenda de Mapa
+      </h3>
+      <ul class="legend-list">
+        <li class="legend-item">
+          <div class="legend-pin"><span class="material-symbols-outlined filled">home</span></div>
+          <span>Albergue Activo</span>
+        </li>
+        <li class="legend-item">
+          <div class="legend-block"><span class="material-symbols-outlined">close</span></div>
+          <span>Vía Bloqueada</span>
+        </li>
+        <li class="legend-item">
+          <div class="legend-flood"></div>
+          <span>Zona de Inundación</span>
+        </li>
+      </ul>
+    </div>
+
+    <button class="fab" type="button" aria-label="Reportar incidencia">
+      <span class="material-symbols-outlined filled">add_alert</span>
+    </button>
+  </main>
+
+  <app-nav-bottom />
+</div>

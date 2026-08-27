@@ -1,0 +1,21 @@
+<nav class="nav">
+  @for (item of items(); track item.label) {
+    @if (item.disabled) {
+      <button class="nav-btn nav-btn--disabled" type="button" disabled>
+        <span class="material-symbols-outlined">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+      </button>
+    } @else {
+      <a
+        class="nav-btn"
+        [routerLink]="item.route"
+        routerLinkActive="nav-btn--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        #rla="routerLinkActive"
+      >
+        <span class="material-symbols-outlined" [class.filled]="rla.isActive">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  }
+</nav>
