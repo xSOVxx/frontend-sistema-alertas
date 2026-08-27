@@ -1,59 +1,97 @@
 # FrontendSistemaAlertas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+Frontend del sistema de alertas **PonteAlerta Piura**, generado con [Angular CLI](https://github.com/angular/angular-cli) 20.3.8 (Angular 20, standalone components + signals).
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Node.js 22** (requerido). Con nvm:
 
 ```bash
-ng generate component component-name
+nvm install 22
+nvm use 22
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Dependencias:
+
+```bash
+npm install
+```
+
+## Servidor de desarrollo
+
+```bash
+npm start
+```
+
+Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modificar los archivos.
+
+## Rutas
+
+| Ruta           | Vista                      |
+| -------------- | -------------------------- |
+| `/`            | Redirige a `/feed`         |
+| `/feed`        | Feed de alertas y noticias |
+| `/mapa`        | Mapa de emergencias        |
+| `/voluntariado`| Voluntariado y donaciones  |
+| `/login`       | Inicio de sesión           |
+
+## Compilación
+
+```bash
+npm run build
+```
+
+Los artefactos se generan en `dist/`. Por defecto la build de producción optimiza la aplicación.
+
+## Generar código (scaffolding)
+
+Angular CLI incluye herramientas de scaffolding. Para generar un componente:
+
+```bash
+ng generate component nombre-componente
+```
+
+Otras generaciones útiles:
+
+```bash
+ng generate service core/services/nombre
+ng generate interface models/nombre
+ng generate directive shared/directives/nombre
+ng generate pipe shared/pipes/nombre
+```
+
+Para la lista completa de schematics (componentes, servicios, guards, interceptors, etc.):
 
 ```bash
 ng generate --help
 ```
 
-## Building
+Sugerencia: los componentes reutilizables van en `src/app/shared/components/` y las pantallas en `src/app/features/`.
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Tests unitarios
 
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
+Ejecutados con [Karma](https://karma-runner.github.io) y Jasmine (headless): `npx ng test --watch=false --browsers=ChromeHeadless`.
 
-For end-to-end (e2e) testing, run:
+## Tests end-to-end
 
-```bash
-ng e2e
+El proyecto no incluye un framework e2e por defecto. Para agregarlo, Angular CLI ofrece `ng e2e` una vez configurado un framework como Cypress o Playwright.
+
+## Estructura
+
+```
+src/app/
+├── shared/components/    # componentes reutilizables (bottom-nav, topbar)
+├── features/             # una carpeta por pantalla
+├── environments/         # claves públicas de cliente
+stitch/                   # HTML de referencia extraído de Stitch (MCP)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Para más detalle sobre las prácticas del proyecto, ver las skills en `.opencode/skills/`.
 
-## Additional Resources
+## Recursos
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
