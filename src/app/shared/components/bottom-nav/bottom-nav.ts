@@ -19,6 +19,6 @@ export class BottomNav {
     { icon: 'newspaper', label: 'Noticias', route: '/feed', disabled: false },
     { icon: 'map', label: 'Mapa', route: '/mapa', disabled: false },
     { icon: 'volunteer_activism', label: 'Ayuda', route: '/voluntariado', disabled: false },
-    { icon: 'person', label: 'Perfil', route: '', disabled: true }
+    { icon: 'person', label: 'Perfil', route: '/perfil', disabled: false }
   ]);
 }

@@ -26,14 +26,13 @@ describe('BottomNav', () => {
     expect(compiled.querySelectorAll('.nav-btn').length).toBe(4);
   });
 
-  it('should disable the Perfil tab', () => {
+  it('should link to the Perfil route', () => {
     const fixture = TestBed.createComponent(BottomNav);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('button.nav-btn');
-    const perfil = buttons[0];
-    expect(perfil.disabled).toBeTrue();
-    expect(perfil.textContent).toContain('Perfil');
+    const anchors = compiled.querySelectorAll<HTMLAnchorElement>('a.nav-btn');
+    const perfil = Array.from(anchors).find((a) => a.textContent?.includes('Perfil'));
+    expect(perfil?.getAttribute('href')).toBe('/perfil');
   });
 
   it('should link to the correct routes', () => {

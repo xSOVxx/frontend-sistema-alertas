@@ -17,5 +17,9 @@ export const routes: Routes = [
   {
     path: 'voluntariado',
     loadComponent: () => import('./features/voluntariado/voluntariado').then((m) => m.Voluntariado)
+  },
+  {
+    path: 'perfil',
+    loadComponent: () => import('./features/perfil/perfil').then((m) => m.Perfil)
   }
 ];
