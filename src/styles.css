@@ -80,6 +80,7 @@ body {
   border-radius: 12px;
   color: var(--on-surface-variant);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .avatar-btn:hover {

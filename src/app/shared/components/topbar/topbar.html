@@ -5,5 +5,10 @@
   <h1 class="topbar-title">{{ title() }}</h1>
   <div class="topbar-right">
     <ng-content select="[topbar-right]" />
+    @if (showAvatar()) {
+      <a class="avatar-btn" routerLink="/perfil" aria-label="Cuenta">
+        <span class="material-symbols-outlined">account_circle</span>
+      </a>
+    }
   </div>
 </header>
