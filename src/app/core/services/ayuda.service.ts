@@ -8,7 +8,7 @@ import { GoalItem, StockItem, VolunteerRequest, VolunteerResponse } from '../../
 @Injectable({ providedIn: 'root' })
 export class AyudaService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly baseUrl = environment.services.aid;
 
   registerVolunteer(request: VolunteerRequest): Observable<VolunteerResponse> {
     return this.http.post<VolunteerResponse>(this.url(API_ENDPOINTS.volunteers.register), request);

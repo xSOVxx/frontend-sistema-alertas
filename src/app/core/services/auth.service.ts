@@ -10,13 +10,13 @@ import { SessionService } from './session.service';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly session = inject(SessionService);
-  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly baseUrl = environment.services.auth;
   private readonly mockUsers = [
     {
       email: 'usuario@correo.com',
       password: 'contraseña',
       response: {
-        accessToken: 'mock-access-token',
+        accessToken: 'mock-token-demo-user-1',
         user: {
           id: 'demo-user-1',
           name: 'Usuario Demo',

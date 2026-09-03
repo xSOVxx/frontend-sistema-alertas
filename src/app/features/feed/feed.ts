@@ -28,9 +28,6 @@ export class Feed {
 
   protected readonly filteredAlerts = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();
-    if (!query) {
-      return this.alerts();
-    }
     return this.alerts().filter((alert) => {
       const matchesQuery = `${alert.title} ${alert.label} ${alert.description ?? ''}`
         .toLowerCase()

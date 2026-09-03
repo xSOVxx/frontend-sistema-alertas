@@ -8,7 +8,7 @@ import { UserProfile } from '../../models/api.models';
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly baseUrl = environment.services.users;
 
   getProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.url(API_ENDPOINTS.profile.me));

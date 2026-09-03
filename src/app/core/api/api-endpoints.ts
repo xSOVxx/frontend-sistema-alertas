@@ -24,5 +24,13 @@ export const API_ENDPOINTS = {
   },
   profile: {
     me: '/users/me'
+  },
+  weather: {
+    current: '/weather/current',
+    forecast: '/weather/forecast'
+  },
+  seismic: {
+    recent: '/earthquakes/recent',
+    riskPrediction: '/earthquakes/risk-prediction'
   }
 } as const;

@@ -14,7 +14,7 @@ export interface MapData {
 @Injectable({ providedIn: 'root' })
 export class MapaService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly baseUrl = environment.services.maps;
 
   getMapData(): Observable<MapData> {
     return forkJoin({

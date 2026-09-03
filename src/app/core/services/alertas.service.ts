@@ -8,7 +8,7 @@ import { AlertItem } from '../../models/api.models';
 @Injectable({ providedIn: 'root' })
 export class AlertasService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly baseUrl = environment.services.alerts;
 
   getAlerts(search?: string): Observable<AlertItem[]> {
     let params = new HttpParams();

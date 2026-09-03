@@ -150,7 +150,10 @@ export class Mapa {
   }
 
   private addZones(): void {
-    this.map?.addSource('flood-zones', {
+    if (!this.map || this.map.getSource('flood-zones')) {
+      return;
+    }
+    this.map.addSource('flood-zones', {
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
@@ -165,7 +168,7 @@ export class Mapa {
       }
     });
 
-    this.map?.addLayer({
+    this.map.addLayer({
       id: 'flood-circles',
       type: 'circle',
       source: 'flood-zones',
