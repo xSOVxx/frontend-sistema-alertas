@@ -37,8 +37,8 @@ Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modif
 
 ## Endpoints esperados
 
-Configura la URL base en `src/environments/environment.ts` mediante `apiBaseUrl`.
-El frontend espera estos endpoints REST:
+Configura las URLs por dominio en `src/environments/environment.ts`, dentro de `services`.
+En desarrollo, los dominios implementados apuntan a `http://localhost:3000`; clima y sismos quedan preparados para `3001` y `3002`.
 
 | Método | Endpoint | Uso |
 | ------ | -------- | --- |
@@ -60,8 +60,17 @@ El frontend espera estos endpoints REST:
 
 Las rutas protegidas reciben `Authorization: Bearer <accessToken>` automáticamente.
 
-Mientras el backend no tenga autenticación, `useMockAuth` está activo en `environment.ts`.
-Credenciales temporales: `usuario@correo.com` / `contraseña`.
+El servicio `MonitoreoService` ya está preparado para:
+
+| Método | Endpoint | Microservicio |
+| --- | --- | --- |
+| GET | `/weather/current?latitude=&longitude=` | Clima |
+| GET | `/weather/forecast?latitude=&longitude=` | Clima |
+| GET | `/earthquakes/recent` | Sismos |
+| GET | `/earthquakes/risk-prediction?zone=` | Predicción sísmica |
+
+Estos cuatro endpoints son contratos futuros: todavía no existen en el backend local.
+La autenticación usa el backend real (`useMockAuth: false`). Credenciales temporales: `usuario@correo.com` / `contraseña`.
 
 ## Compilación
 
