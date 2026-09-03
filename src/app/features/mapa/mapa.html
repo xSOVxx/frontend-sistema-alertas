@@ -13,6 +13,10 @@
   <main class="map-wrap">
     <div #canvas class="map-canvas"></div>
 
+    @if (loading()) {
+      <div class="map-error">Cargando información de emergencias...</div>
+    }
+
     @if (mapError()) {
       <div class="map-error">
         <span class="material-symbols-outlined">error_outline</span>
@@ -58,7 +62,7 @@
       </ul>
     </div>
 
-    <button class="fab" type="button" aria-label="Reportar incidencia">
+    <button class="fab" type="button" aria-label="Reportar incidencia" (click)="reportIncident()">
       <span class="material-symbols-outlined filled">add_alert</span>
     </button>
   </main>

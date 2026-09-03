@@ -10,6 +10,12 @@
   </app-topbar>
 
   <main class="main">
+    @if (loading()) {
+      <p role="status">Cargando información...</p>
+    }
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+    }
     <section class="header">
       <h1 class="title">Voluntariado y Donaciones</h1>
       <p class="subtitle">Gestione recursos y personal para emergencias activas en la región.</p>
@@ -48,7 +54,7 @@
             <button
               class="submit"
               type="submit"
-              [disabled]="voluntarioForm.invalid"
+              [disabled]="voluntarioForm.invalid || submitState() === 'processing'"
               [class.submit--processing]="submitState() === 'processing'"
               [class.submit--done]="submitState() === 'done'"
             >

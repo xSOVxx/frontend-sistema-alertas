@@ -1,27 +1,13 @@
 import { Component, DestroyRef, ElementRef, ViewChild, afterNextRender, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type * as maplibregl from 'maplibre-gl';
 import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
 import { Topbar } from '../../shared/components/topbar/topbar';
 import { environment } from '../../../environments/environment';
+import { BlockedRoad, FloodZone, IncidentRequest, Shelter } from '../../models/api.models';
+import { MapaService } from '../../core/services/mapa.service';
 
 type StyleKind = 'base' | 'satellite';
-
-interface Shelter {
-  lat: number;
-  lng: number;
-  name: string;
-}
-
-interface BlockedRoad {
-  lat: number;
-  lng: number;
-}
-
-interface FloodZone {
-  lat: number;
-  lng: number;
-  radius: number;
-}
 
 @Component({
   selector: 'app-mapa',
@@ -30,27 +16,17 @@ interface FloodZone {
   styleUrl: './mapa.css'
 })
 export class Mapa {
+  private readonly mapaService = inject(MapaService);
   protected readonly mapError = signal(false);
+  protected readonly loading = signal(true);
+  protected readonly shelters = signal<Shelter[]>([]);
+  protected readonly blockedRoads = signal<BlockedRoad[]>([]);
+  protected readonly floodZones = signal<FloodZone[]>([]);
 
   @ViewChild('canvas')
   private readonly canvas?: ElementRef<HTMLDivElement>;
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly shelters: Shelter[] = [
-    { lat: -5.1901, lng: -80.6352, name: 'Albergue San Miguel' },
-    { lat: -5.2006, lng: -80.6248, name: 'Albergue Santa Rosa' }
-  ];
-
-  private readonly blockedRoads: BlockedRoad[] = [
-    { lat: -5.1962, lng: -80.6288 },
-    { lat: -5.1898, lng: -80.6402 }
-  ];
-
-  private readonly floodZones: FloodZone[] = [
-    { lat: -5.1958, lng: -80.6332, radius: 800 },
-    { lat: -5.2005, lng: -80.6282, radius: 500 }
-  ];
-
   private ml?: typeof maplibregl;
   private map?: maplibregl.Map;
   private styleKind: StyleKind = 'base';
@@ -65,6 +41,26 @@ export class Mapa {
     });
     afterNextRender(() => {
       void this.initMap();
+    });
+    this.loadMapData();
+  }
+
+  private loadMapData(): void {
+    this.mapaService.getMapData().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (data) => {
+        this.shelters.set(data.shelters);
+        this.blockedRoads.set(data.blockedRoads);
+        this.floodZones.set(data.floodZones);
+        this.loading.set(false);
+        if (this.map?.isStyleLoaded()) {
+          this.addZones();
+          this.addMarkers();
+        }
+      },
+      error: () => {
+        this.loading.set(false);
+        this.mapError.set(true);
+      }
     });
   }
 
@@ -139,14 +135,14 @@ export class Mapa {
     }
     const { Marker, Popup } = this.ml;
 
-    this.shelters.forEach((shelter) => {
+    this.shelters().forEach((shelter) => {
       new Marker({ element: this.buildPinElement(), anchor: 'bottom' })
         .setLngLat([shelter.lng, shelter.lat])
         .setPopup(new Popup({ offset: 28 }).setText(shelter.name))
         .addTo(this.map!);
     });
 
-    this.blockedRoads.forEach((road) => {
+    this.blockedRoads().forEach((road) => {
       new Marker({ element: this.buildBlockElement() })
         .setLngLat([road.lng, road.lat])
         .addTo(this.map!);
@@ -158,7 +154,7 @@ export class Mapa {
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: this.floodZones.map((zone) => ({
+        features: this.floodZones().map((zone) => ({
           type: 'Feature' as const,
           geometry: {
             type: 'Point' as const,
@@ -215,5 +211,27 @@ export class Mapa {
     this.styleKind = this.styleKind === 'base' ? 'satellite' : 'base';
     this.map.setStyle(this.styleUrl(this.styleKind));
     this.map.once('style.load', () => this.addZones());
+  }
+
+  protected reportIncident(): void {
+    if (!navigator.geolocation) {
+      this.mapError.set(true);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const incident: IncidentRequest = {
+          type: 'general',
+          description: 'Incidencia reportada desde el mapa',
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+        this.mapaService.reportIncident(incident).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          error: () => this.mapError.set(true)
+        });
+      },
+      () => this.mapError.set(true),
+      { timeout: 5000 }
+    );
   }
 }

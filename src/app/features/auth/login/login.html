@@ -63,11 +63,16 @@
         </div>
 
         <div class="actions">
-          <button class="submit" type="submit" [disabled]="loginForm.invalid">
-            Ingresar
-            <span class="material-symbols-outlined filled">login</span>
+          <button class="submit" type="submit" [disabled]="loginForm.invalid || loading()">
+            {{ loading() ? 'Ingresando...' : 'Ingresar' }}
+            <span class="material-symbols-outlined filled" [class.spin]="loading()">
+              {{ loading() ? 'sync' : 'login' }}
+            </span>
           </button>
-          <a class="forgot" href="#">Olvidé mi contraseña</a>
+          @if (error()) {
+            <p class="error-message" role="alert">{{ error() }}</p>
+          }
+          <a class="forgot" href="#" (click)="onForgotPassword($event)">Olvidé mi contraseña</a>
         </div>
       </form>
     </div>

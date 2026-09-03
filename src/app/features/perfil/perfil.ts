@@ -1,15 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
 import { Topbar } from '../../shared/components/topbar/topbar';
-
-interface UserProfile {
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  joinDate: string;
-  avatar?: string;
-}
+import { PerfilService } from '../../core/services/perfil.service';
+import { AuthService } from '../../core/services/auth.service';
+import { UserProfile } from '../../models/api.models';
 
 @Component({
   selector: 'app-perfil',
@@ -18,13 +14,13 @@ interface UserProfile {
   styleUrl: './perfil.css'
 })
 export class Perfil {
-  protected readonly userProfile = signal<UserProfile>({
-    name: 'Juan Pérez Rodríguez',
-    email: 'juan.perez@example.com',
-    phone: '+51 (073) 123-4567',
-    location: 'Piura, Perú',
-    joinDate: 'Joined March 2024'
-  });
+  private readonly perfilService = inject(PerfilService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly userProfile = signal<UserProfile>({ id: '', name: '', email: '' });
+  protected readonly loading = signal(true);
+  protected readonly error = signal<string | null>(null);
 
   protected readonly isEditing = signal(false);
 
@@ -36,6 +32,24 @@ export class Perfil {
     { icon: 'logout', label: 'Cerrar Sesión', action: 'logout' }
   ]);
 
+  constructor() {
+    this.loadProfile();
+  }
+
+  protected loadProfile(): void {
+    this.loading.set(true);
+    this.perfilService.getProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (profile) => {
+        this.userProfile.set(profile);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set('No se pudo cargar el perfil.');
+      }
+    });
+  }
+
   protected onMenuAction(action: string): void {
     switch (action) {
       case 'edit':
@@ -45,7 +59,7 @@ export class Perfil {
         this.handleLogout();
         break;
       default:
-        console.log('Action:', action);
+        this.error.set('Esta opción estará disponible próximamente.');
     }
   }
 
@@ -54,7 +68,11 @@ export class Perfil {
   }
 
   protected handleLogout(): void {
-    // TODO: Implementar lógica de logout con autenticación
-    console.log('Logout');
+    this.authService.logout().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => void this.router.navigate(['/login']),
+      error: () => {
+        this.error.set('No se pudo cerrar sesión.');
+      }
+    });
   }
 }

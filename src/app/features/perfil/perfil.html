@@ -7,6 +7,13 @@
   </app-topbar>
 
   <main class="main">
+    @if (loading()) {
+      <p role="status">Cargando perfil...</p>
+    }
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+      <button type="button" (click)="loadProfile()">Reintentar</button>
+    }
     <section class="profile-header">
       <div class="avatar">
         <span class="material-symbols-outlined avatar-icon">account_circle</span>

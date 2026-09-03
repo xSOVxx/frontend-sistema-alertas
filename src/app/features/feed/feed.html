@@ -22,12 +22,18 @@
           (input)="onSearch($event)"
         />
       </div>
-      <button class="filter-btn" type="button" aria-label="Filtrar">
+      <button class="filter-btn" type="button" aria-label="Filtrar" (click)="toggleFilter()">
         <span class="material-symbols-outlined">filter_list</span>
       </button>
     </section>
 
     <section class="feed">
+      @if (loading()) {
+        <p class="empty">Cargando alertas...</p>
+      } @else if (error()) {
+        <p class="empty" role="alert">{{ error() }}</p>
+        <button class="card-action" type="button" (click)="loadAlerts()">Reintentar</button>
+      }
       @for (alert of filteredAlerts(); track alert.title) {
         <article
           class="card"
@@ -42,7 +48,7 @@
                 <span class="material-symbols-outlined filled">{{ alert.icon }}</span>
                 <span class="card-kind-label">{{ alert.label }}</span>
               </div>
-              <span class="card-time">{{ alert.time }}</span>
+              <span class="card-time">{{ alert.createdAt }}</span>
             </div>
             <h3 class="card-title">{{ alert.title }}</h3>
             @if (alert.image) {
@@ -54,9 +60,9 @@
               <p class="card-desc">{{ alert.description }}</p>
             }
             <div class="card-actions" [class.card-actions--mt]="!!alert.image">
-              <button class="card-action" type="button">
+              <button class="card-action" type="button" (click)="openAlert(alert)">
                 <span class="material-symbols-outlined filled">{{ alert.actionIcon }}</span>
-                {{ alert.actionLabel }}
+                {{ alert.actionLabel ?? 'Ver detalle' }}
               </button>
             </div>
           </div>

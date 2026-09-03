@@ -1,23 +1,13 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BottomNav } from '../../shared/components/bottom-nav/bottom-nav';
 import { Topbar } from '../../shared/components/topbar/topbar';
+import { AyudaService } from '../../core/services/ayuda.service';
+import { GoalItem, StockItem } from '../../models/api.models';
 
 type SubmitState = 'idle' | 'processing' | 'done';
-
-interface StockItem {
-  icon: string;
-  name: string;
-  stock: string;
-  status: 'adecuado' | 'critico' | 'agotado';
-}
-
-interface GoalItem {
-  label: string;
-  percent: number;
-  mono: string;
-  color: string;
-}
 
 @Component({
   selector: 'app-voluntariado',
@@ -26,10 +16,12 @@ interface GoalItem {
   styleUrl: './voluntariado.css'
 })
 export class Voluntariado {
+  private readonly ayudaService = inject(AyudaService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly submitState = signal<SubmitState>('idle');
   protected readonly refreshing = signal(false);
-
-  private readonly destroyRef = inject(DestroyRef);
+  protected readonly loading = signal(true);
+  protected readonly error = signal<string | null>(null);
 
   protected readonly submitLabel = computed(() => {
     switch (this.submitState()) {
@@ -53,27 +45,8 @@ export class Voluntariado {
     }
   });
 
-  protected readonly stockItems = signal<StockItem[]>([
-    { icon: 'water_drop', name: 'Agua', stock: '500 L', status: 'adecuado' },
-    { icon: 'shopping_basket', name: 'Canastas', stock: '120 Unidades', status: 'critico' },
-    { icon: 'holiday_village', name: 'Carpas', stock: '45 Unidades', status: 'agotado' },
-    { icon: 'medical_services', name: 'Kits Médicos', stock: '80 Unidades', status: 'adecuado' }
-  ]);
-
-  protected readonly goals = signal<GoalItem[]>([
-    {
-      label: 'Alimentos No Perecibles',
-      percent: 75,
-      mono: '75% (750/1000 kg)',
-      color: '#002046'
-    },
-    {
-      label: 'Fondos Emergencia Sullana',
-      percent: 40,
-      mono: '40% (S/. 40k/100k)',
-      color: '#E67E22'
-    }
-  ]);
+  protected readonly stockItems = signal<StockItem[]>([]);
+  protected readonly goals = signal<GoalItem[]>([]);
 
   protected readonly voluntarioForm = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
@@ -81,26 +54,59 @@ export class Voluntariado {
     habilidad: new FormControl('', [Validators.required])
   });
 
+  constructor() {
+    this.loadData();
+  }
+
   protected onSubmit(): void {
     if (this.voluntarioForm.invalid) {
       this.voluntarioForm.markAllAsTouched();
       return;
     }
     this.submitState.set('processing');
-    const doneTimer = setTimeout(() => {
-      this.submitState.set('done');
-      const resetTimer = setTimeout(() => {
+    this.ayudaService.registerVolunteer({
+      nombre: this.voluntarioForm.controls.nombre.value ?? '',
+      dni: this.voluntarioForm.controls.dni.value ?? '',
+      habilidad: this.voluntarioForm.controls.habilidad.value ?? ''
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.submitState.set('done');
         this.voluntarioForm.reset();
+      },
+      error: () => {
         this.submitState.set('idle');
-      }, 2000);
-      this.destroyRef.onDestroy(() => clearTimeout(resetTimer));
-    }, 1000);
-    this.destroyRef.onDestroy(() => clearTimeout(doneTimer));
+        this.error.set('No se pudo registrar el voluntario.');
+      }
+    });
   }
 
   protected refreshStock(): void {
     this.refreshing.set(true);
-    const timer = setTimeout(() => this.refreshing.set(false), 1000);
-    this.destroyRef.onDestroy(() => clearTimeout(timer));
+    this.ayudaService.getStock().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (stock) => {
+        this.stockItems.set(stock);
+        this.refreshing.set(false);
+      },
+      error: () => {
+        this.refreshing.set(false);
+        this.error.set('No se pudo actualizar el inventario.');
+      }
+    });
+  }
+
+  private loadData(): void {
+    forkJoin({ stock: this.ayudaService.getStock(), goals: this.ayudaService.getGoals() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.stockItems.set(data.stock);
+          this.goals.set(data.goals);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.loading.set(false);
+          this.error.set('No se pudo cargar la información de ayuda.');
+        }
+      });
   }
 }

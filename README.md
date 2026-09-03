@@ -35,6 +35,34 @@ Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modif
 | `/voluntariado`| Voluntariado y donaciones  |
 | `/login`       | Inicio de sesión           |
 
+## Endpoints esperados
+
+Configura la URL base en `src/environments/environment.ts` mediante `apiBaseUrl`.
+El frontend espera estos endpoints REST:
+
+| Método | Endpoint | Uso |
+| ------ | -------- | --- |
+| POST | `/auth/login` | Iniciar sesión y devolver `accessToken` y `user` |
+| POST | `/auth/logout` | Cerrar sesión |
+| POST | `/auth/refresh` | Renovar token |
+| POST | `/auth/forgot-password` | Solicitar recuperación |
+| GET | `/alerts` | Listar alertas; acepta `search` |
+| GET | `/alerts/:id` | Consultar una alerta |
+| GET | `/map/shelters` | Listar albergues |
+| GET | `/map/blocked-roads` | Listar vías bloqueadas |
+| GET | `/map/flood-zones` | Listar zonas de inundación |
+| POST | `/incidents` | Reportar una incidencia |
+| POST | `/volunteers` | Registrar voluntario |
+| GET | `/resources/stock` | Consultar inventario |
+| GET | `/resources/goals` | Consultar metas de donación |
+| GET | `/users/me` | Consultar perfil autenticado |
+| PATCH | `/users/me` | Actualizar perfil autenticado |
+
+Las rutas protegidas reciben `Authorization: Bearer <accessToken>` automáticamente.
+
+Mientras el backend no tenga autenticación, `useMockAuth` está activo en `environment.ts`.
+Credenciales temporales: `usuario@correo.com` / `contraseña`.
+
 ## Compilación
 
 ```bash
