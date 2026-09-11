@@ -1,9 +1,7 @@
-// Claves públicas de cliente: se exponen en el bundle y no deben
-// usarse para almacenar secretos. Para información sensible, usar
-// variables de entorno del backend/servidor.
+﻿// Configuración de entorno para desarrollo y conexión local con NestJS backend
 export const environment = {
   apiBaseUrl: 'http://localhost:3000',
-  useMockAuth: false,
+  useMockAuth: true,
   services: {
     auth: 'http://localhost:3000',
     alerts: 'http://localhost:3000',

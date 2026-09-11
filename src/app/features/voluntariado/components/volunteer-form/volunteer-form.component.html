@@ -1,0 +1,48 @@
+<section class="card form-card">
+  <div class="card-head">
+    <span class="material-symbols-outlined card-icon">person_add</span>
+    <h2 class="card-title">Registro de Voluntarios</h2>
+  </div>
+
+  <form class="form" [formGroup]="voluntarioForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label class="field-label" for="nombre">Nombre Completo</label>
+      <input id="nombre" type="text" formControlName="nombre" placeholder="Ej. Juan Pérez" />
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="dni">DNI / Documento</label>
+      <input id="dni" type="tel" formControlName="dni" placeholder="Ej. 12345678" />
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="habilidad">Habilidad / Disponibilidad</label>
+      <select id="habilidad" formControlName="habilidad">
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="medico">Atención Médica Primaria</option>
+        <option value="logistica">Logística y Distribución</option>
+        <option value="rescate">Búsqueda y Rescate</option>
+        <option value="apoyo">Apoyo General</option>
+      </select>
+    </div>
+
+    <div class="field-actions">
+      <button
+        class="submit"
+        type="submit"
+        [disabled]="voluntarioForm.invalid || submitState() === 'processing'"
+        [class.submit--processing]="submitState() === 'processing'"
+        [class.submit--done]="submitState() === 'done'"
+      >
+        <span
+          class="material-symbols-outlined"
+          [class.spin]="submitState() === 'processing'"
+          [class.filled]="submitState() === 'done'"
+        >
+          {{ submitIcon() }}
+        </span>
+        {{ submitLabel() }}
+      </button>
+    </div>
+  </form>
+</section>

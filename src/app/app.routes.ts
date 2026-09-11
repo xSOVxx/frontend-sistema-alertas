@@ -1,30 +1,33 @@
-import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
+﻿import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login)
+    loadComponent: () =>
+      import('./features/auth/pages/login/login.component').then((m) => m.LoginComponent)
   },
   {
     path: 'feed',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/feed/feed').then((m) => m.Feed)
+    loadComponent: () =>
+      import('./features/feed/pages/feed/feed.component').then((m) => m.FeedComponent)
   },
   {
     path: 'mapa',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/mapa/mapa').then((m) => m.Mapa)
+    loadComponent: () =>
+      import('./features/mapa/pages/mapa/mapa.component').then((m) => m.MapaComponent)
   },
   {
     path: 'voluntariado',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/voluntariado/voluntariado').then((m) => m.Voluntariado)
+    loadComponent: () =>
+      import('./features/voluntariado/pages/voluntariado/voluntariado.component').then(
+        (m) => m.VoluntariadoComponent
+      )
   },
   {
     path: 'perfil',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/perfil/perfil').then((m) => m.Perfil)
-  }
+    loadComponent: () =>
+      import('./features/perfil/pages/perfil/perfil.component').then((m) => m.PerfilComponent)
+  },
+  { path: '**', redirectTo: 'feed' }
 ];

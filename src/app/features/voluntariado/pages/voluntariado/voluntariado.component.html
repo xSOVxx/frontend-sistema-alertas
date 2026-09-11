@@ -1,0 +1,86 @@
+﻿<div class="page">
+  <app-topbar>
+    <div topbar-left class="brand-container">
+      <div class="brand-badge">
+        <span class="material-symbols-outlined brand-icon">volunteer_activism</span>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">PonteAlerta Piura</span>
+        <span class="brand-subtitle">Voluntariado & Asistencia Humanitaria</span>
+      </div>
+    </div>
+  </app-topbar>
+
+  <main class="main-content">
+    <!-- Banner de Auxilio Rápido para Damnificados -->
+    <section class="need-help-card">
+      <div class="need-help-content">
+        <div class="help-tag">
+          <span class="material-symbols-outlined help-icon">emergency</span>
+          <span>¿Necesitas ayuda urgente?</span>
+        </div>
+        <h2 class="help-headline">Canal Abierto para Familias y Damnificados</h2>
+        <p class="help-desc">
+          Si te encuentras afectado por lluvias, inundaciones o aislamiento en cualquier distrito de Piura, registra tu pedido con tu distrito o código de Ubigeo.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="sos-action-btn"
+        (click)="showHelpModal.set(true)"
+        id="btn-voluntariado-pedir-ayuda"
+      >
+        <span class="material-symbols-outlined">sos</span>
+        <span>Solicitar Ayuda Aquí</span>
+      </button>
+    </section>
+
+    <header class="section-heading">
+      <h1 class="title page-title">Voluntariado y Donaciones</h1>
+      <p class="page-subtitle">Suma tus manos o apoya con recursos logísticos a las comunidades más vulnerables de la región.</p>
+    </header>
+
+    @if (loading()) {
+      <div class="status-box">
+        <span class="material-symbols-outlined spin">progress_activity</span>
+        <span>Cargando metas y recursos comunitarios...</span>
+      </div>
+    }
+    @if (error()) {
+      <div class="error-box" role="alert">
+        <span class="material-symbols-outlined">warning</span>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="bento-grid">
+      <div class="bento-col-form">
+        <app-volunteer-form
+          [submitState]="submitState()"
+          (register)="onRegister($event)"
+        />
+      </div>
+
+      <div class="bento-col-resources">
+        <app-stock-inventory
+          [items]="stockItems()"
+          [refreshing]="refreshing()"
+          (refresh)="onRefreshStock()"
+        />
+
+        <app-donation-goals
+          [goals]="goals()"
+        />
+      </div>
+    </div>
+  </main>
+
+  <app-bottom-nav />
+
+  <!-- Modal para damnificados -->
+  @if (showHelpModal()) {
+    <app-solicitar-ayuda-modal
+      (close)="showHelpModal.set(false)"
+    />
+  }
+</div>

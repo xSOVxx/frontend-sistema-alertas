@@ -1,0 +1,24 @@
+<section class="card">
+  <div class="card-head">
+    <span class="material-symbols-outlined card-icon">monitoring</span>
+    <h2 class="card-title">Metas de Recaudación</h2>
+  </div>
+
+  <div class="goals">
+    @for (goal of goals(); track goal.id || goal.label) {
+      <div class="goal">
+        <div class="goal-row">
+          <span class="goal-label">{{ goal.label }}</span>
+          <span class="goal-mono">{{ goal.mono }}</span>
+        </div>
+        <div class="goal-track">
+          <div
+            class="goal-fill"
+            [style.width.%]="goal.percent"
+            [style.background]="goal.color"
+          ></div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<section class="card">
+  <div class="card-head card-head--row">
+    <div class="card-head-group">
+      <span class="material-symbols-outlined card-icon">inventory_2</span>
+      <h2 class="card-title">Control de Ayuda Humanitaria</h2>
+    </div>
+    <button class="refresh-btn" type="button" aria-label="Actualizar" (click)="onRefresh()">
+      <span class="material-symbols-outlined" [class.spin]="refreshing()">sync</span>
+    </button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Recurso</th>
+          <th>Stock Actual</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id || item.name) {
+          <tr>
+            <td class="resource-cell">
+              <span class="material-symbols-outlined resource-icon">{{ item.icon }}</span>
+              {{ item.name }}
+            </td>
+            <td>{{ item.stock }}</td>
+            <td>
+              <span class="badge" [class]="'badge--' + item.status">
+                <span class="badge-dot"></span>
+                {{ item.status === 'adecuado' ? 'Adecuado' : item.status === 'critico' ? 'Crítico' : 'Agotado' }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

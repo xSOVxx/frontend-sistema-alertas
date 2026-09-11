@@ -1,4 +1,4 @@
-export const API_ENDPOINTS = {
+﻿export const API_ENDPOINTS = {
   auth: {
     login: '/auth/login',
     logout: '/auth/logout',
@@ -8,6 +8,9 @@ export const API_ENDPOINTS = {
   alerts: {
     list: '/alerts',
     detail: (id: string) => `/alerts/${id}`
+  },
+  coerScraper: {
+    sync: '/coer-scraper/test-coer'
   },
   map: {
     shelters: '/map/shelters',

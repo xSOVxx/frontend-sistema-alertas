@@ -1,0 +1,30 @@
+@if (!network.isOnline()) {
+  <div class="network-bar network-bar--offline" role="alert" aria-live="assertive">
+    <div class="network-bar-content">
+      <span class="material-symbols-outlined icon">wifi_off</span>
+      <div class="text-wrap">
+        <span class="title">Modo Fuera de Línea (Sin Conexión)</span>
+        <span class="desc">
+          Mostrando las últimas noticias y mapas guardados localmente. Puedes seguir navegando.
+        </span>
+      </div>
+    </div>
+    @if (network.pendingRequests().length > 0) {
+      <span class="pending-tag">
+        {{ network.pendingRequests().length }} SOS guardado(s) localmente
+      </span>
+    }
+  </div>
+} @else if (network.justReconnected()) {
+  <div class="network-bar network-bar--reconnected" role="status" aria-live="polite">
+    <div class="network-bar-content">
+      <span class="material-symbols-outlined icon spin">sync</span>
+      <div class="text-wrap">
+        <span class="title">¡Conexión Restablecida!</span>
+        <span class="desc">
+          Actualizando avisos del COER y despachando reportes pendientes...
+        </span>
+      </div>
+    </div>
+  </div>
+}

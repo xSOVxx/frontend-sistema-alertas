@@ -1,0 +1,214 @@
+<div class="modal-backdrop" (click)="onOverlayClick($event)">
+  <div class="modal-card">
+    <header class="modal-header">
+      <div class="modal-icon-badge">
+        <span class="material-symbols-outlined">sos</span>
+      </div>
+      <div class="modal-header-text">
+        <h2 class="modal-title">Solicitar Ayuda Inmediata</h2>
+        <p class="modal-subtitle">Envía tus datos y necesidades para que brigadas y voluntarios puedan localizarte.</p>
+      </div>
+      <button class="close-btn" type="button" (click)="close.emit()" aria-label="Cerrar">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </header>
+
+    @if (successTicket()) {
+      <div class="success-state">
+        <div class="success-icon" [class.success-icon--offline]="isOfflineSubmission()">
+          <span class="material-symbols-outlined">
+            {{ isOfflineSubmission() ? 'offline_pin' : 'check_circle' }}
+          </span>
+        </div>
+        <h3 class="success-title">
+          {{ isOfflineSubmission() ? '¡Reporte Guardado en tu Dispositivo!' : '¡Solicitud Registrada con Éxito!' }}
+        </h3>
+        <p class="success-desc">
+          Tu reporte ha sido registrado con el código de ticket:
+          <strong class="ticket-code">{{ successTicket() }}</strong>
+        </p>
+        <div class="success-info-box" [class.success-info-box--offline]="isOfflineSubmission()">
+          <p>
+            <span class="material-symbols-outlined">{{ isOfflineSubmission() ? 'wifi_off' : 'info' }}</span>
+            @if (isOfflineSubmission()) {
+              <span>Estás sin señal en este momento. Tu solicitud quedó <strong>guardada en tu teléfono</strong> y será transmitida automáticamente a las brigadas apenas se recupere la conexión a internet.</span>
+            } @else {
+              <span>Las brigadas de Defensa Civil y la red de voluntarios de la Región Piura podrán ver tu ubicación y requerimientos. Mantén tu teléfono activo.</span>
+            }
+          </p>
+        </div>
+        <button class="primary-btn full-btn" type="button" (click)="close.emit()">
+          Entendido, cerrar
+        </button>
+      </div>
+    } @else {
+      <form class="modal-body" (ngSubmit)="submitHelpRequest()">
+        @if (errorMessage()) {
+          <div class="alert-banner" role="alert">
+            <span class="material-symbols-outlined">error</span>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <!-- 1. Ubicación y Ubigeo -->
+        <fieldset class="form-section">
+          <legend class="section-title">
+            <span class="step-num">1</span>
+            ¿Dónde te encuentras en Piura?
+          </legend>
+
+          <div class="field-group">
+            <label class="field-label" for="districtInput">Distrito o Ubigeo</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined input-icon">location_on</span>
+              <input
+                id="districtInput"
+                class="field-input"
+                type="text"
+                placeholder="Escribe tu distrito (ej: Catacaos, Castilla, Sullana...)"
+                [ngModel]="districtSearch()"
+                (ngModelChange)="onSearchDistrict($event)"
+                name="districtSearch"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Sugerencias automáticas que rellenan el Ubigeo -->
+            @if (filteredUbigeos().length > 0 && !selectedUbigeo()) {
+              <div class="suggestions-dropdown">
+                <span class="dropdown-tip">Sugerencias encontradas (haz clic para autocompletar):</span>
+                @for (item of filteredUbigeos(); track item.code) {
+                  <button
+                    type="button"
+                    class="suggestion-item"
+                    (click)="selectUbigeo(item)"
+                  >
+                    <span class="sug-district">{{ item.district }}</span>
+                    <span class="sug-meta">{{ item.province }} &bull; Ubigeo: <strong>{{ item.code }}</strong></span>
+                  </button>
+                }
+              </div>
+            }
+
+            @if (selectedUbigeo()) {
+              <div class="selected-ubigeo-chip">
+                <span class="material-symbols-outlined">check</span>
+                <span>Distrito: <strong>{{ selectedUbigeo()?.district }}</strong> (Ubigeo oficial: <strong>{{ selectedUbigeo()?.code }}</strong>)</span>
+                <button type="button" class="chip-clear" (click)="selectedUbigeo.set(null)" title="Cambiar distrito">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+              </div>
+            }
+          </div>
+
+          <div class="field-group">
+            <div class="label-with-action">
+              <label class="field-label" for="addressInput">Dirección o Referencia</label>
+              <button type="button" class="gps-btn" (click)="getGpsLocation()" [disabled]="loading()">
+                <span class="material-symbols-outlined">my_location</span>
+                <span>{{ gpsLocation() ? 'GPS Obtenido' : 'Usar mi GPS' }}</span>
+              </button>
+            </div>
+            <input
+              id="addressInput"
+              class="field-input"
+              type="text"
+              placeholder="Ej: AA.HH. Los Polvorines Mz. B Lote 12 (frente al canal)"
+              [(ngModel)]="address"
+              name="address"
+            />
+          </div>
+        </fieldset>
+
+        <!-- 2. Necesidades Urgentes -->
+        <fieldset class="form-section">
+          <legend class="section-title">
+            <span class="step-num">2</span>
+            ¿Qué necesitas con urgencia?
+          </legend>
+          <p class="section-hint">Selecciona una o más necesidades prioritarias:</p>
+
+          <div class="needs-grid">
+            @for (need of availableNeeds; track need.id) {
+              <button
+                type="button"
+                class="need-chip"
+                [class.need-chip--active]="isNeedSelected(need.id)"
+                (click)="toggleNeed(need.id)"
+              >
+                <span class="material-symbols-outlined">{{ need.icon }}</span>
+                <span class="need-label">{{ need.label }}</span>
+                @if (isNeedSelected(need.id)) {
+                  <span class="material-symbols-outlined check-icon">check</span>
+                }
+              </button>
+            }
+          </div>
+        </fieldset>
+
+        <!-- 3. Datos de Contacto -->
+        <fieldset class="form-section">
+          <legend class="section-title">
+            <span class="step-num">3</span>
+            Datos para comunicarnos contigo
+          </legend>
+
+          <div class="fields-row">
+            <div class="field-group">
+              <label class="field-label" for="contactNameInput">Tu Nombre o Familia</label>
+              <input
+                id="contactNameInput"
+                class="field-input"
+                type="text"
+                placeholder="Ej: Juan Pérez / Familia Ramos"
+                [(ngModel)]="contactName"
+                name="contactName"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="phoneInput">Teléfono / WhatsApp</label>
+              <input
+                id="phoneInput"
+                class="field-input"
+                type="tel"
+                placeholder="Ej: 987 654 321"
+                [(ngModel)]="phone"
+                name="phone"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="descInput">Situación actual (Opcional)</label>
+            <textarea
+              id="descInput"
+              class="field-textarea"
+              rows="2"
+              placeholder="Ej: Somos 4 personas (1 adulto mayor y un bebé), el agua subió 30cm, no tenemos agua potable."
+              [(ngModel)]="description"
+              name="description"
+            ></textarea>
+          </div>
+        </fieldset>
+
+        <footer class="modal-footer">
+          <button type="button" class="secondary-btn" (click)="close.emit()">
+            Cancelar
+          </button>
+          <button type="submit" class="primary-btn submit-sos-btn" [disabled]="loading()">
+            @if (loading()) {
+              <span class="material-symbols-outlined spin">sync</span>
+              <span>Enviando solicitud...</span>
+            } @else {
+              <span class="material-symbols-outlined">{{ !network.isOnline() ? 'save' : 'send' }}</span>
+              <span>{{ !network.isOnline() ? 'Guardar y Enviar al Conectar' : 'Enviar Solicitud de Ayuda' }}</span>
+            }
+          </button>
+        </footer>
+      </form>
+    }
+  </div>
+</div>

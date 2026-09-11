@@ -1,0 +1,43 @@
+<div class="page">
+  <app-topbar title="PonteAlerta Piura">
+    <button topbar-left class="topbar-btn" type="button" aria-label="Estado de conexión">
+      <span class="material-symbols-outlined">signal_wifi_4_bar</span>
+    </button>
+  </app-topbar>
+
+  <div class="offline-bar">
+    <span class="material-symbols-outlined filled">cloud_off</span>
+    <span class="offline-label">Modo Offline - Guardando Localmente</span>
+  </div>
+
+  <main class="map-wrap">
+    <div #canvas class="map-canvas"></div>
+
+    @if (loading()) {
+      <div class="map-error">Cargando información de emergencias...</div>
+    }
+
+    @if (mapError()) {
+      <div class="map-error">
+        <span class="material-symbols-outlined">error_outline</span>
+        No se pudo cargar el mapa. Verifica tu conexión.
+      </div>
+    }
+
+    <app-map-controls
+      class="controls-overlay"
+      (locate)="locate()"
+      (zoomIn)="zoomIn()"
+      (zoomOut)="zoomOut()"
+      (toggleLayer)="toggleLayer()"
+    />
+
+    <app-map-legend class="legend-overlay" />
+
+    <button class="fab" type="button" aria-label="Reportar incidencia" (click)="reportIncident()">
+      <span class="material-symbols-outlined filled">add_alert</span>
+    </button>
+  </main>
+
+  <app-bottom-nav />
+</div>
