@@ -57,8 +57,14 @@ export class AdminResourcesComponent {
 
   protected readonly shelterForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    lat: new FormControl(-5.1945, { nonNullable: true }),
-    lng: new FormControl(-80.6328, { nonNullable: true }),
+    lat: new FormControl(-5.1945, {
+      nonNullable: true,
+      validators: [Validators.min(-90), Validators.max(90)]
+    }),
+    lng: new FormControl(-80.6328, {
+      nonNullable: true,
+      validators: [Validators.min(-180), Validators.max(180)]
+    }),
     capacity: new FormControl(0, { nonNullable: true, validators: [Validators.min(0)] }),
     availableCapacity: new FormControl(0, { nonNullable: true, validators: [Validators.min(0)] }),
     address: new FormControl('', { nonNullable: true })
@@ -66,16 +72,28 @@ export class AdminResourcesComponent {
 
   protected readonly roadForm = new FormGroup({
     description: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    latitude: new FormControl(-5.18, { nonNullable: true }),
-    longitude: new FormControl(-80.65, { nonNullable: true }),
+    latitude: new FormControl(-5.18, {
+      nonNullable: true,
+      validators: [Validators.min(-90), Validators.max(90)]
+    }),
+    longitude: new FormControl(-80.65, {
+      nonNullable: true,
+      validators: [Validators.min(-180), Validators.max(180)]
+    }),
     severity: new FormControl<Severity>('YELLOW', { nonNullable: true }),
     status: new FormControl<'ACTIVE' | 'RESOLVED'>('ACTIVE', { nonNullable: true })
   });
 
   protected readonly zoneForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    lat: new FormControl(-5.21, { nonNullable: true }),
-    lng: new FormControl(-80.64, { nonNullable: true }),
+    lat: new FormControl(-5.21, {
+      nonNullable: true,
+      validators: [Validators.min(-90), Validators.max(90)]
+    }),
+    lng: new FormControl(-80.64, {
+      nonNullable: true,
+      validators: [Validators.min(-180), Validators.max(180)]
+    }),
     radius: new FormControl(1000, { nonNullable: true, validators: [Validators.min(1)] }),
     severity: new FormControl<Severity>('YELLOW', { nonNullable: true })
   });

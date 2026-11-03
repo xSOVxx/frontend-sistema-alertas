@@ -51,9 +51,9 @@ export class MapaComponent {
   private loadMapData(): void {
     this.mapaService.getMapData().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
-        this.shelters.set(data.shelters);
-        this.blockedRoads.set(data.blockedRoads);
-        this.floodZones.set(data.floodZones);
+        this.shelters.set(data.shelters.filter((item) => this.isValidCoordinate(item.lat, item.lng)));
+        this.blockedRoads.set(data.blockedRoads.filter((item) => this.isValidCoordinate(item.lat, item.lng)));
+        this.floodZones.set(data.floodZones.filter((item) => this.isValidCoordinate(item.lat, item.lng)));
         this.loading.set(false);
         if (this.map?.isStyleLoaded()) {
           this.addZones();
@@ -65,6 +65,17 @@ export class MapaComponent {
         this.mapError.set(true);
       }
     });
+  }
+
+  private isValidCoordinate(lat: number, lng: number): boolean {
+    return (
+      Number.isFinite(lat) &&
+      Number.isFinite(lng) &&
+      lat >= -90 &&
+      lat <= 90 &&
+      lng >= -180 &&
+      lng <= 180
+    );
   }
 
   private styleUrl(kind: StyleKind): string {
