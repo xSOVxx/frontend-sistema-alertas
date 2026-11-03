@@ -60,7 +60,8 @@ export class SessionService {
     try {
       const payload = token.split('.')[1];
       const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(decodeURIComponent(escape(atob(normalized))));
+      const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+      return JSON.parse(decodeURIComponent(escape(atob(padded))));
     } catch {
       return null;
     }
