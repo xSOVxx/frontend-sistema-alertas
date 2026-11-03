@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+.map-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  color: var(--on-surface);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.control-group .control-btn {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.control-group .control-btn:first-child {
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.control-btn:hover {
+  background: var(--surface-container-high);
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+}

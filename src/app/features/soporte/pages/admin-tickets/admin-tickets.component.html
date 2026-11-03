@@ -1,0 +1,151 @@
+<div class="page">
+  <app-topbar>
+    <span topbar-left class="topbar-brand">
+      <span class="material-symbols-outlined">confirmation_number</span>
+      Bandeja ITSM
+    </span>
+  </app-topbar>
+
+  <main class="main">
+    <div class="head">
+      <div>
+        <h1>Tickets de soporte</h1>
+        <p>Catálogo, SLA y trazabilidad de solicitudes de la aplicación.</p>
+      </div>
+      <button type="button" class="secondary" (click)="downloadCsv()">Exportar CSV</button>
+    </div>
+
+    @if (metrics(); as m) {
+      <section class="kpi-grid">
+        <article class="kpi"><span>Total</span><strong>{{ m.totalTickets }}</strong></article>
+        <article class="kpi"><span>Abiertos</span><strong>{{ m.openTickets }}</strong></article>
+        <article class="kpi"><span>Resueltos</span><strong>{{ m.resolvedTickets }}</strong></article>
+        <article class="kpi"><span>Vencidos</span><strong>{{ m.overdueTickets }}</strong></article>
+        <article class="kpi"><span>SLA</span><strong>{{ m.slaCompliancePercent }}%</strong></article>
+        <article class="kpi"><span>1ª respuesta</span><strong>{{ m.averageFirstResponseHours }}h</strong></article>
+        <article class="kpi"><span>Resolución</span><strong>{{ m.averageResolutionHours }}h</strong></article>
+        <article class="kpi"><span>Reabiertos</span><strong>{{ m.reopenedTickets }}</strong></article>
+      </section>
+      <div class="sla-bar" [style.--value]="slaPercent(m) + '%'">
+        <span>Cumplimiento SLA global</span>
+        <strong>{{ m.slaCompliancePercent }}%</strong>
+      </div>
+    }
+
+    <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
+      <input type="search" formControlName="search" placeholder="Buscar por código, asunto o correo" />
+      <select formControlName="status">
+        <option value="">Todos los estados</option>
+        <option value="NEW">Nuevo</option>
+        <option value="ASSIGNED">Asignado</option>
+        <option value="IN_PROGRESS">En proceso</option>
+        <option value="WAITING_USER">Esperando usuario</option>
+        <option value="RESOLVED">Resuelto</option>
+        <option value="CLOSED">Cerrado</option>
+        <option value="CANCELLED">Cancelado</option>
+      </select>
+      <select formControlName="priority">
+        <option value="">Todas las prioridades</option>
+        <option value="CRITICAL">Crítica</option>
+        <option value="HIGH">Alta</option>
+        <option value="MEDIUM">Media</option>
+        <option value="LOW">Baja</option>
+      </select>
+      <button type="submit" class="primary">Filtrar</button>
+    </form>
+
+    @if (error()) {
+      <p class="alert" role="alert">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="state">Cargando tickets...</p>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Asunto</th>
+              <th>Tipo</th>
+              <th>Prioridad</th>
+              <th>Estado</th>
+              <th>Creado</th>
+              <th>SLA</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (ticket of tickets(); track ticket.id) {
+              <tr>
+                <td class="code">{{ ticket.code }}</td>
+                <td>
+                  <strong>{{ ticket.subject }}</strong>
+                  <small>{{ ticket.requesterEmail }}</small>
+                </td>
+                <td>{{ ticket.type }}</td>
+                <td><span class="priority" [attr.data-priority]="ticket.priority">{{ ticket.priority }}</span></td>
+                <td><span class="status" [attr.data-status]="ticket.status">{{ statusLabel(ticket.status) }}</span></td>
+                <td>{{ formatDate(ticket.createdAt) }}</td>
+                <td>{{ formatDate(ticket.slaResolutionDue) }}</td>
+                <td><button type="button" class="link" (click)="open(ticket)">Abrir</button></td>
+              </tr>
+            } @empty {
+              <tr><td colspan="8" class="state">No hay tickets para los filtros seleccionados.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (selected(); as ticket) {
+      <div class="drawer-backdrop" (click)="close()"></div>
+      <aside class="drawer">
+        <button type="button" class="close" (click)="close()">×</button>
+        <p class="code">{{ ticket.code }}</p>
+        <h2>{{ ticket.subject }}</h2>
+        <p class="muted">{{ ticket.description }}</p>
+
+        <dl class="detail-grid">
+          <div><dt>Solicitante</dt><dd>{{ ticket.requesterName }}</dd></div>
+          <div><dt>Correo</dt><dd>{{ ticket.requesterEmail }}</dd></div>
+          <div><dt>Tipo</dt><dd>{{ ticket.type }}</dd></div>
+          <div><dt>Categoría</dt><dd>{{ ticket.category }}</dd></div>
+          <div><dt>Creado</dt><dd>{{ formatDate(ticket.createdAt) }}</dd></div>
+          <div><dt>Estado</dt><dd>{{ statusLabel(ticket.status) }}</dd></div>
+        </dl>
+
+        <label class="label" for="priority">Prioridad</label>
+        <select id="priority" [value]="ticket.priority" (change)="changePriority(ticket, $any($event.target).value)">
+          <option value="CRITICAL">Crítica</option>
+          <option value="HIGH">Alta</option>
+          <option value="MEDIUM">Media</option>
+          <option value="LOW">Baja</option>
+        </select>
+
+        <div class="actions">
+          @for (status of nextStatuses(ticket); track status) {
+            <button type="button" class="primary" [disabled]="saving()" (click)="changeStatus(ticket, status)">
+              {{ statusLabel(status) }}
+            </button>
+          }
+        </div>
+
+        @if (ticket.history?.length) {
+          <h3>Historial</h3>
+          <ul class="timeline">
+            @for (event of ticket.history; track event.id) {
+              <li>
+                <span class="dot"></span>
+                <div>
+                  <strong>{{ statusLabel(event.toStatus) }}</strong>
+                  <p>{{ event.note || 'Actualización' }} · {{ formatDate(event.createdAt) }}</p>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </aside>
+    }
+  </main>
+</div>

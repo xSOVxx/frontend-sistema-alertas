@@ -27,13 +27,70 @@ Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modif
 
 ## Rutas
 
-| Ruta           | Vista                      |
-| -------------- | -------------------------- |
-| `/`            | Redirige a `/feed`         |
-| `/feed`        | Feed de alertas y noticias |
-| `/mapa`        | Mapa de emergencias        |
-| `/voluntariado`| Voluntariado y donaciones  |
-| `/login`       | Inicio de sesión           |
+| Ruta | Vista |
+| --- | --- |
+| `/` | Redirige a `/feed` |
+| `/feed` | Feed de alertas y noticias |
+| `/alertas/:id` | Detalle de una alerta |
+| `/mapa` | Mapa de emergencias |
+| `/monitoreo` | Clima, pronóstico y sismos |
+| `/voluntariado` | Voluntariado y donaciones |
+| `/soporte` | Mesa de ayuda y tickets |
+| `/admin/tickets` | Bandeja ITSM para ADMIN |
+| `/perfil` | Perfil del usuario |
+| `/acerca-de` | Información del proyecto |
+| `/login` | Inicio de sesión |
+| `/register` | Registro de usuario |
+
+## Endpoints esperados
+
+Configura las URLs por dominio en `src/environments/environment.ts`, dentro de `services`.
+En desarrollo, los dominios implementados apuntan a `http://localhost:3000`; clima y sismos quedan preparados para `3001` y `3002`.
+
+| Método | Endpoint | Uso |
+| ------ | -------- | --- |
+| POST | `/auth/login` | Iniciar sesión y devolver `accessToken` y `user` |
+| POST | `/auth/logout` | Cerrar sesión |
+| POST | `/auth/refresh` | Renovar token |
+| POST | `/auth/forgot-password` | Solicitar recuperación |
+| GET | `/alerts` | Listar alertas; acepta `search` |
+| GET | `/alerts/:id` | Consultar una alerta |
+| GET | `/map/shelters` | Listar albergues |
+| GET | `/map/blocked-roads` | Listar vías bloqueadas |
+| GET | `/map/flood-zones` | Listar zonas de inundación |
+| POST | `/incidents` | Reportar una incidencia |
+| POST | `/volunteers` | Registrar voluntario |
+| GET | `/resources/stock` | Consultar inventario |
+| GET | `/resources/goals` | Consultar metas de donación |
+| GET | `/users/me` | Consultar perfil autenticado |
+| PATCH | `/users/me` | Actualizar perfil autenticado |
+| POST | `/auth/register` | Registro con Keycloak |
+| POST | `/auth/refresh` | Renovar token |
+| POST | `/auth/logout` | Cerrar sesión |
+| POST | `/auth/forgot-password` | Recuperar contraseña |
+| POST | `/volunteers` | Registrar voluntario |
+| GET | `/tickets/catalog` | Catálogo ITSM |
+| POST | `/tickets` | Crear ticket |
+| GET | `/tickets/track/:code` | Consultar ticket |
+| GET | `/tickets/me` | Mis tickets |
+| GET | `/tickets` | Bandeja ADMIN |
+| PATCH | `/tickets/:id` | Actualizar ticket |
+| GET | `/tickets/metrics` | KPIs de soporte |
+| GET | `/weather/*`, `/earthquakes/*` | Monitoreo |
+
+Las rutas protegidas reciben `Authorization: Bearer <accessToken>` automáticamente.
+
+El servicio `MonitoreoService` ya está preparado para:
+
+| Método | Endpoint | Microservicio |
+| --- | --- | --- |
+| GET | `/weather/current?latitude=&longitude=` | Clima |
+| GET | `/weather/forecast?latitude=&longitude=` | Clima |
+| GET | `/earthquakes/recent` | Sismos |
+| GET | `/earthquakes/risk-prediction?zone=` | Predicción sísmica |
+
+Estos cuatro endpoints son contratos futuros: todavía no existen en el backend local.
+La autenticación usa el backend real (`useMockAuth: false`). Credenciales temporales: `usuario@correo.com` / `contraseña`.
 
 ## Compilación
 
@@ -41,7 +98,9 @@ Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modif
 npm run build
 ```
 
-Los artefactos se generan en `dist/`. Por defecto la build de producción optimiza la aplicación.
+Los artefactos se generan en `dist/`. La build de producción usa
+`src/environments/environment.prod.ts`; cambia `API_URL` por la URL pública del
+backend antes de desplegar.
 
 ## Generar código (scaffolding)
 

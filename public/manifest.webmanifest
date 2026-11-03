@@ -1,0 +1,25 @@
+{
+  "name": "PonteAlerta Piura - Emergencias & Asistencia",
+  "short_name": "PonteAlerta",
+  "theme_color": "#0284c7",
+  "background_color": "#f8fafc",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/feed",
+  "orientation": "portrait-primary",
+  "description": "Sistema de alertas tempranas del COER Piura, visualización offline durante catástrofes y auxilio a damnificados.",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["utilities", "weather", "government"]
+}

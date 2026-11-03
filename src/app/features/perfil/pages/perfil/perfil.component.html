@@ -1,0 +1,101 @@
+<div class="page">
+  <app-topbar [showAvatar]="false">
+    <span topbar-left class="topbar-brand">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </span>
+  </app-topbar>
+
+  <main class="main">
+    @if (loading()) {
+      <p role="status">Cargando perfil...</p>
+    }
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+      <button type="button" (click)="loadProfile()">Reintentar</button>
+    }
+    <section class="profile-header">
+      <div class="avatar">
+        <span class="material-symbols-outlined avatar-icon">account_circle</span>
+      </div>
+      <div class="profile-info">
+        <h1 class="profile-name">{{ userProfile().name }}</h1>
+        <p class="profile-location">{{ userProfile().location || 'Piura, Perú' }}</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="contact-card">
+        <div class="contact-item">
+          <span class="material-symbols-outlined contact-icon">mail</span>
+          <div class="contact-content">
+            <p class="contact-label">Correo electrónico</p>
+            <p class="contact-value">{{ userProfile().email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-item">
+          <span class="material-symbols-outlined contact-icon">phone</span>
+          <div class="contact-content">
+            <p class="contact-label">Teléfono</p>
+            <p class="contact-value">{{ userProfile().phone }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-item">
+          <span class="material-symbols-outlined contact-icon">calendar_today</span>
+          <div class="contact-content">
+            <p class="contact-label">Se unió</p>
+            <p class="contact-value">{{ userProfile().joinDate }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      @for (item of menuItems(); track item.action) {
+        <button
+          class="menu-button"
+          type="button"
+          (click)="onMenuAction(item.action)"
+          [class.logout-btn]="item.action === 'logout'"
+        >
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+        </button>
+      }
+    </section>
+  </main>
+
+  @if (isEditing()) {
+    <div class="modal-backdrop" (click)="closeEdit()">
+      <section class="edit-modal" (click)="$event.stopPropagation()">
+        <h2>Editar perfil</h2>
+        <form [formGroup]="editForm" (ngSubmit)="saveProfile()" novalidate>
+          <label class="field-label" for="editName">Nombre completo</label>
+          <input id="editName" type="text" formControlName="name" />
+
+          <label class="field-label" for="editPhone">Teléfono</label>
+          <input id="editPhone" type="tel" formControlName="phone" placeholder="999999999" />
+
+          <label class="field-label" for="editLocation">Ubicación</label>
+          <input id="editLocation" type="text" formControlName="location" placeholder="Piura, Perú" />
+
+          <div class="modal-actions">
+            <button type="button" class="secondary" (click)="closeEdit()">Cancelar</button>
+            <button type="submit" class="primary" [disabled]="saving() || editForm.invalid">
+              {{ saving() ? 'Guardando...' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  }
+
+  <app-bottom-nav />
+</div>

@@ -1,0 +1,163 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 80px;
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.topbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 12px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.topbar-btn:hover {
+  background: var(--surface-container-low);
+}
+
+.offline-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--surface-container-highest);
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.offline-bar .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--on-surface-variant);
+}
+
+.offline-label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--on-surface-variant);
+}
+
+.map-wrap {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: var(--surface-container-low);
+}
+
+.map-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.map-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  color: var(--on-surface-variant);
+  background: var(--surface-container-low);
+}
+
+.controls-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+}
+
+.legend-overlay {
+  position: absolute;
+  bottom: 24px;
+  left: 16px;
+  right: 80px;
+  z-index: 1000;
+  max-width: 24rem;
+}
+
+.fab {
+  position: absolute;
+  bottom: 24px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--error);
+  border: none;
+  border-radius: 12px;
+  color: var(--on-error);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.fab:hover {
+  background: var(--on-error-container);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.map-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  border: 2px solid var(--surface);
+  border-radius: 12px 12px 2px 12px;
+  transform: rotate(45deg);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.map-pin .material-symbols-outlined {
+  transform: rotate(-45deg);
+  font-size: 20px;
+  color: var(--on-primary);
+}
+
+.road-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--error);
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  color: var(--on-error);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.road-block .material-symbols-outlined {
+  font-size: 18px;
+  font-weight: 700;
+}

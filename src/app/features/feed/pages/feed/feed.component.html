@@ -1,0 +1,207 @@
+<div class="page">
+  <app-topbar>
+    <div topbar-left class="topbar-brand brand-container">
+      <div class="brand-badge">
+        <span class="material-symbols-outlined brand-icon">radar</span>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">PonteAlerta Piura</span>
+        <span class="brand-subtitle">COER &bull; Sistema de Emergencias</span>
+      </div>
+    </div>
+    <div topbar-right class="topbar-actions">
+      <a class="monitoring-link" routerLink="/monitoreo" title="Monitoreo de clima y sismos">
+        <span class="material-symbols-outlined">monitoring</span>
+      </a>
+      <button
+        class="scraping-pill-btn"
+        type="button"
+        (click)="ejecutarScraping()"
+        [disabled]="syncing() || !network.isOnline()"
+        title="Sincronizar avisos y reportes del COER Piura"
+      >
+        <span class="material-symbols-outlined" [class.spin]="syncing()">
+          {{ !network.isOnline() ? 'wifi_off' : 'sync' }}
+        </span>
+        <span class="btn-label">{{ syncing() ? 'Sincronizando...' : (!network.isOnline() ? 'Sin Red' : 'Actualizar COER') }}</span>
+      </button>
+    </div>
+  </app-topbar>
+
+  @if (syncing() || syncMessage()) {
+    <aside class="sync-banner" [class.sync-banner--active]="syncing()" aria-live="polite">
+      <span class="material-symbols-outlined" [class.spin]="syncing()">
+        {{ syncing() ? 'refresh' : 'check_circle' }}
+      </span>
+      <span>{{ syncMessage() || 'Sincronizando reportes en tiempo real...' }}</span>
+    </aside>
+  }
+
+  <main class="feed-container">
+    <!-- Hero / Quick Assistance Banner -->
+    <header class="assistance-hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          <span>Atención a la Comunidad &bull; Piura</span>
+        </div>
+        <h1 class="hero-title">Canal Abierto de Emergencias y Alertas</h1>
+        <p class="hero-description">
+          Reportes meteorológicos e hidrológicos oficiales del COER, y atención directa a damnificados por lluvias o desbordes en los distritos de Piura.
+        </p>
+
+        <div class="hero-actions">
+          <button
+            type="button"
+            class="hero-btn hero-btn--sos"
+            (click)="showHelpModal.set(true)"
+            id="btn-solicitar-ayuda"
+          >
+            <span class="material-symbols-outlined">sos</span>
+            <span>Solicitar Ayuda (Damnificado)</span>
+          </button>
+
+          <a
+            routerLink="/voluntariado"
+            class="hero-btn hero-btn--volunteer"
+            id="btn-ir-voluntariado"
+          >
+            <span class="material-symbols-outlined">volunteer_activism</span>
+            <span>Quiero ser Voluntario</span>
+          </a>
+          <a
+            href="https://t.me/AlertasCatastrofesBot"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hero-btn hero-btn--telegram"
+            id="btn-asistente-telegram"
+            title="Abrir asistente de emergencias con Inteligencia Artificial en Telegram"
+          >
+            <span class="material-symbols-outlined">smart_toy</span>
+            <span>Bot de Telegram (IA)</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Barra de Búsqueda y Filtros Clean -->
+    <section class="controls-card">
+      <div class="search-field">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar por distrito, río o tipo de alerta (ej. Chulucanas, caudal, lluvia)..."
+          (input)="onSearch($event)"
+          [value]="searchQuery()"
+        />
+        @if (searchQuery()) {
+          <button type="button" class="clear-search-btn" (click)="searchQuery.set('')">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        }
+      </div>
+
+      <!-- Chips de Filtros -->
+      <div class="filters-row">
+        <button
+          type="button"
+          class="filter-chip"
+          [class.filter-chip--active]="selectedKind() === null"
+          (click)="setFilter(null)"
+        >
+          <span>Todos</span>
+          <span class="chip-count">{{ alerts().length }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="filter-chip filter-chip--danger"
+          [class.filter-chip--active]="selectedKind() === 'danger'"
+          (click)="setFilter('danger')"
+        >
+          <span class="chip-dot danger"></span>
+          <span>Peligro / Alerta Roja</span>
+        </button>
+
+        <button
+          type="button"
+          class="filter-chip filter-chip--warning"
+          [class.filter-chip--active]="selectedKind() === 'warning'"
+          (click)="setFilter('warning')"
+        >
+          <span class="chip-dot warning"></span>
+          <span>Precaución</span>
+        </button>
+
+        <button
+          type="button"
+          class="filter-chip filter-chip--info"
+          [class.filter-chip--active]="selectedKind() === 'info'"
+          (click)="setFilter('info')"
+        >
+          <span class="chip-dot info"></span>
+          <span>Informativo</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Lista de Alertas -->
+    <section class="alerts-stream">
+      <div class="stream-header">
+        <h2 class="stream-title">Avisos y Reportes Recientes</h2>
+        <div class="stream-meta">
+          @if (isUsingOfflineCache() || !network.isOnline()) {
+            <span class="offline-badge" title="Información guardada localmente en tu dispositivo">
+              <span class="material-symbols-outlined">offline_pin</span>
+              <span>Modo Offline</span>
+            </span>
+          }
+          <span class="stream-count">{{ filteredAlerts().length }} reporte(s)</span>
+        </div>
+      </div>
+
+      @if (loading() && alerts().length === 0) {
+        <div class="state-card loading-card">
+          <span class="material-symbols-outlined spin state-icon">progress_activity</span>
+          <p class="state-text">Consultando boletines del COER Piura...</p>
+        </div>
+      } @else if (error() && alerts().length === 0) {
+        <div class="state-card error-card">
+          <span class="material-symbols-outlined state-icon">cloud_off</span>
+          <p class="state-title">No se pudieron cargar las alertas</p>
+          <p class="state-text">{{ error() }}</p>
+          <button class="primary-action-btn" type="button" (click)="loadAlerts()">
+            Reintentar conexión
+          </button>
+        </div>
+      }
+
+      @for (alert of filteredAlerts(); track alert.id || alert.title) {
+        <app-alert-card [alert]="alert" (open)="openAlert($event)" />
+      } @empty {
+        @if (!loading() && !error()) {
+          <div class="state-card empty-card">
+            <span class="material-symbols-outlined state-icon">campaign</span>
+            <p class="state-title">No hay alertas con los filtros seleccionados</p>
+            <p class="state-text">Puedes cambiar los criterios de búsqueda o sincronizar con el COER.</p>
+            <button class="primary-action-btn" type="button" (click)="ejecutarScraping()">
+              <span class="material-symbols-outlined">sync</span>
+              <span>Sincronizar ahora</span>
+            </button>
+          </div>
+        }
+      }
+    </section>
+  </main>
+
+  <app-bottom-nav />
+
+  <!-- Modal de Solicitud de Ayuda para Damnificados -->
+  @if (showHelpModal()) {
+    <app-solicitar-ayuda-modal
+      (close)="showHelpModal.set(false)"
+      (submitted)="onHelpSubmitted()"
+    />
+  }
+</div>

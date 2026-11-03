@@ -1,0 +1,16 @@
+<div class="map-controls">
+  <button class="control-btn" type="button" aria-label="Mi ubicación" (click)="onLocate()">
+    <span class="material-symbols-outlined">my_location</span>
+  </button>
+  <div class="control-group">
+    <button class="control-btn" type="button" aria-label="Acercar" (click)="onZoomIn()">
+      <span class="material-symbols-outlined">add</span>
+    </button>
+    <button class="control-btn" type="button" aria-label="Alejar" (click)="onZoomOut()">
+      <span class="material-symbols-outlined">remove</span>
+    </button>
+  </div>
+  <button class="control-btn" type="button" aria-label="Capas" (click)="onToggleLayer()">
+    <span class="material-symbols-outlined">layers</span>
+  </button>
+</div>

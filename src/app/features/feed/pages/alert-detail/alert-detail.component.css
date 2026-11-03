@@ -1,0 +1,126 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+.alert-card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-left: 6px solid var(--informacion-text);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+}
+
+.alert-card[data-kind='roja'] {
+  border-left-color: var(--roja-text);
+}
+
+.alert-card[data-kind='precaucion'] {
+  border-left-color: var(--precaucion-text);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--informacion-bg);
+  color: var(--informacion-text);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.alert-card[data-kind='roja'] .badge {
+  background: var(--roja-bg);
+  color: var(--roja-text);
+}
+
+.alert-card[data-kind='precaucion'] .badge {
+  background: var(--precaucion-bg);
+  color: var(--precaucion-text);
+}
+
+h1 {
+  margin: 14px 0 6px;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.date {
+  margin: 0;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+}
+
+.content {
+  margin: 18px 0;
+  color: var(--on-surface);
+  font-size: 15px;
+  line-height: 25px;
+  white-space: pre-line;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.secondary {
+  background: var(--surface-container);
+  color: var(--primary);
+}
+
+.state {
+  padding: 24px;
+  text-align: center;
+  color: var(--on-surface-variant);
+}
+
+.state--error {
+  color: var(--error);
+}

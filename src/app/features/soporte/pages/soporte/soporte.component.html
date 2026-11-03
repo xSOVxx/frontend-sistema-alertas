@@ -1,0 +1,189 @@
+<div class="page">
+  <app-topbar>
+    <span topbar-left class="topbar-brand">
+      <span class="material-symbols-outlined">support_agent</span>
+      Soporte
+    </span>
+  </app-topbar>
+
+  <main class="main">
+    <div class="intro">
+      <h1>Mesa de ayuda PonteAlerta</h1>
+      <p>Reporta una incidencia de la aplicación, solicita acceso o consulta el estado de tu ticket.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button type="button" [class.active]="tab() === 'new'" (click)="setTab('new')">Nuevo ticket</button>
+      <button type="button" [class.active]="tab() === 'track'" (click)="setTab('track')">Consultar</button>
+      <button type="button" [class.active]="tab() === 'mine'" (click)="setTab('mine')">Mis tickets</button>
+    </div>
+
+    @if (error()) {
+      <p class="alert" role="alert">{{ error() }}</p>
+    }
+
+    @if (tab() === 'new') {
+      @if (createdTicket(); as ticket) {
+        <section class="success-card">
+          <span class="material-symbols-outlined filled">check_circle</span>
+          <div>
+            <h2>Ticket creado</h2>
+            <p>Guarda tu código para consultar el avance:</p>
+            <p class="ticket-code">{{ ticket.code }}</p>
+            <p class="muted">
+              SLA de respuesta: {{ formatDate(ticket.slaResponseDue) }} ·
+              Resolución: {{ formatDate(ticket.slaResolutionDue) }}
+            </p>
+            <button type="button" class="secondary" (click)="createdTicket.set(null)">Crear otro ticket</button>
+          </div>
+        </section>
+      } @else {
+        <section class="card">
+          <h2>¿Qué necesitas?</h2>
+          <p class="muted">Selecciona el tipo de solicitud. El SLA se asigna automáticamente.</p>
+
+          @if (loadingCatalog()) {
+            <p class="muted">Cargando catálogo...</p>
+          } @else {
+            <div class="catalog-grid">
+              @for (option of typeOptions(); track option.type) {
+                <button
+                  type="button"
+                  class="catalog-card"
+                  [class.selected]="createForm.controls.type.value === option.type"
+                  (click)="onTypeChange(option.type)"
+                >
+                  <span class="material-symbols-outlined">{{ option.type === 'ACCESS' ? 'lock' : option.type === 'BUG' ? 'bug_report' : option.type === 'RESOURCE' ? 'inventory_2' : option.type === 'IMPROVEMENT' ? 'lightbulb' : 'info' }}</span>
+                  <strong>{{ option.label }}</strong>
+                  <small>{{ option.description }}</small>
+                </button>
+              }
+            </div>
+
+            <form [formGroup]="createForm" (ngSubmit)="submit()" novalidate>
+              <div class="field">
+                <label for="category">Categoría</label>
+                <select id="category" formControlName="category">
+                  @for (category of categoryOptions(); track category) {
+                    <option [value]="category">{{ category }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="subject">Asunto</label>
+                <input id="subject" type="text" formControlName="subject" placeholder="Resumen breve de tu solicitud" />
+              </div>
+
+              <div class="field">
+                <label for="description">Descripción</label>
+                <textarea id="description" formControlName="description" rows="4" placeholder="Describe qué ocurrió, dónde y desde qué dispositivo."></textarea>
+              </div>
+
+              <div class="two-col">
+                <div class="field">
+                  <label for="requesterName">Nombre</label>
+                  <input id="requesterName" type="text" formControlName="requesterName" />
+                </div>
+                <div class="field">
+                  <label for="requesterPhone">Teléfono (opcional)</label>
+                  <input id="requesterPhone" type="tel" formControlName="requesterPhone" placeholder="999999999" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="requesterEmail">Correo electrónico</label>
+                <input id="requesterEmail" type="email" formControlName="requesterEmail" />
+              </div>
+
+              <button class="primary" type="submit" [disabled]="submitting() || createForm.invalid">
+                {{ submitting() ? 'Enviando...' : 'Crear ticket' }}
+              </button>
+            </form>
+          }
+        </section>
+      }
+    }
+
+    @if (tab() === 'track') {
+      <section class="card">
+        <h2>Consultar ticket</h2>
+        <p class="muted">Ingresa el código que recibiste al crear la solicitud.</p>
+        <form [formGroup]="trackForm" (ngSubmit)="track()" novalidate>
+          <div class="two-col">
+            <div class="field">
+              <label for="code">Código</label>
+              <input id="code" type="text" formControlName="code" placeholder="TCK-20261102-0001" />
+            </div>
+            <div class="field">
+              <label for="trackEmail">Correo (opcional)</label>
+              <input id="trackEmail" type="email" formControlName="email" />
+            </div>
+          </div>
+          <button class="primary" type="submit" [disabled]="tracking() || trackForm.invalid">
+            {{ tracking() ? 'Buscando...' : 'Consultar' }}
+          </button>
+        </form>
+
+        @if (trackedTicket(); as ticket) {
+          <article class="ticket-card">
+            <div class="ticket-head">
+              <div>
+                <p class="ticket-code">{{ ticket.code }}</p>
+                <h3>{{ ticket.subject }}</h3>
+              </div>
+              <span class="status" [attr.data-status]="ticket.status">{{ statusLabel(ticket.status) }}</span>
+            </div>
+            <p class="muted">{{ ticket.description }}</p>
+            <dl class="ticket-meta">
+              <div><dt>Tipo</dt><dd>{{ typeLabel(ticket.type) }}</dd></div>
+              <div><dt>Prioridad</dt><dd>{{ ticket.priority }}</dd></div>
+              <div><dt>Creado</dt><dd>{{ formatDate(ticket.createdAt) }}</dd></div>
+              <div><dt>SLA resolución</dt><dd>{{ formatDate(ticket.slaResolutionDue) }}</dd></div>
+            </dl>
+            @if (ticket.history?.length) {
+              <h4>Historial</h4>
+              <ul class="timeline">
+                @for (event of ticket.history; track event.id) {
+                  <li>
+                    <span class="dot"></span>
+                    <div>
+                      <strong>{{ statusLabel(event.toStatus) }}</strong>
+                      <p>{{ event.note || 'Actualización' }} · {{ formatDate(event.createdAt) }}</p>
+                    </div>
+                  </li>
+                }
+              </ul>
+            }
+          </article>
+        }
+      </section>
+    }
+
+    @if (tab() === 'mine') {
+      <section class="card">
+        <h2>Mis tickets</h2>
+        @if (loadingMine()) {
+          <p class="muted">Cargando...</p>
+        } @else {
+          <div class="ticket-list">
+            @for (ticket of myTickets(); track ticket.id) {
+              <article class="ticket-row">
+                <div>
+                  <p class="ticket-code">{{ ticket.code }}</p>
+                  <h3>{{ ticket.subject }}</h3>
+                  <p class="muted">{{ formatDate(ticket.createdAt) }}</p>
+                </div>
+                <span class="status" [attr.data-status]="ticket.status">{{ statusLabel(ticket.status) }}</span>
+              </article>
+            } @empty {
+              <p class="muted">Aún no tienes tickets registrados con este correo.</p>
+            }
+          </div>
+        }
+      </section>
+    }
+  </main>
+
+  <app-bottom-nav />
+</div>
