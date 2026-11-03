@@ -37,6 +37,9 @@ Abrir `http://localhost:4200/`. La aplicación recarga automáticamente al modif
 | `/voluntariado` | Voluntariado y donaciones |
 | `/soporte` | Mesa de ayuda y tickets |
 | `/admin/tickets` | Bandeja ITSM para ADMIN |
+| `/admin/metrics` | Métricas del sistema para ADMIN |
+| `/admin/recursos` | Stock, albergues, vías, zonas y voluntarios para ADMIN |
+| `/voluntario` | Panel de voluntario (próximamente) |
 | `/perfil` | Perfil del usuario |
 | `/acerca-de` | Información del proyecto |
 | `/login` | Inicio de sesión |
