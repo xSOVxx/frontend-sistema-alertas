@@ -33,6 +33,7 @@ export class MapaComponent {
   private map?: maplibregl.Map;
   private styleKind: StyleKind = 'base';
   private markersAdded = false;
+  private usingFallbackStyle = false;
   private destroyed = false;
 
   constructor() {
@@ -67,8 +68,29 @@ export class MapaComponent {
   }
 
   private styleUrl(kind: StyleKind): string {
-    const style = kind === 'base' ? 'base-v4' : 'satellite';
+    const style = kind === 'base' ? 'streets-v2' : 'satellite';
     return `https://api.maptiler.com/maps/${style}/style.json?key=${environment.maptilerApiKey}`;
+  }
+
+  private fallbackStyle(): maplibregl.StyleSpecification {
+    return {
+      version: 8,
+      sources: {
+        openstreetmap: {
+          type: 'raster',
+          tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+          tileSize: 256,
+          attribution: '&copy; OpenStreetMap contributors'
+        }
+      },
+      layers: [
+        {
+          id: 'openstreetmap',
+          type: 'raster',
+          source: 'openstreetmap'
+        }
+      ]
+    };
   }
 
   private async initMap(): Promise<void> {
@@ -94,6 +116,11 @@ export class MapaComponent {
 
       this.map.on('error', (event) => {
         console.error('Error del mapa:', event.error);
+        if (!this.usingFallbackStyle && this.map) {
+          this.usingFallbackStyle = true;
+          this.map.setStyle(this.fallbackStyle());
+          return;
+        }
         this.mapError.set(true);
       });
 
@@ -214,6 +241,7 @@ export class MapaComponent {
       return;
     }
     this.styleKind = this.styleKind === 'base' ? 'satellite' : 'base';
+    this.usingFallbackStyle = false;
     this.map.setStyle(this.styleUrl(this.styleKind));
     this.map.once('style.load', () => this.addZones());
   }

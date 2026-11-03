@@ -125,7 +125,7 @@ export class FeedComponent {
   }
 
   protected openAlert(alert: AlertItem): void {
-    void this.router.navigate(['/mapa'], { queryParams: { alertId: alert.id } });
+    void this.router.navigate(['/alertas', alert.id]);
   }
 
   protected onHelpSubmitted(): void {

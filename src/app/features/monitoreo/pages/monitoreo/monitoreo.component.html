@@ -1,0 +1,105 @@
+<div class="page">
+  <app-topbar>
+    <span topbar-left class="topbar-brand">
+      <span class="material-symbols-outlined">monitoring</span>
+      Monitoreo
+    </span>
+  </app-topbar>
+
+  <main class="main">
+    @if (loading()) {
+      <p class="state" role="status">Cargando clima y sismos...</p>
+    }
+    @if (error()) {
+      <div class="state state--error" role="alert">
+        <p>{{ error() }}</p>
+        <button type="button" (click)="loadData()">Reintentar</button>
+      </div>
+    }
+
+    @if (current(); as weather) {
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">Clima actual</p>
+          <h1 class="temperature">{{ weather.temperature }}°C</h1>
+          <p class="condition">{{ weather.condition }}</p>
+          <p class="location">{{ weather.location }}</p>
+        </div>
+        <div class="hero-icon">
+          <span class="material-symbols-outlined filled">partly_cloudy_day</span>
+        </div>
+        <div class="hero-metrics">
+          <span>Humedad {{ weather.humidity }}%</span>
+          <span>Viento {{ weather.windSpeed }} km/h</span>
+          <span>{{ formatDate(weather.observedAt) }}</span>
+        </div>
+      </section>
+    }
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Pronóstico</h2>
+        <span class="material-symbols-outlined">calendar_month</span>
+      </div>
+      <div class="forecast-grid">
+        @for (day of forecast(); track day.date) {
+          <article class="forecast-card">
+            <p class="forecast-date">{{ day.date }}</p>
+            <span class="material-symbols-outlined filled">cloud</span>
+            <p class="forecast-temp">{{ day.minTemperature }}° / {{ day.maxTemperature }}°</p>
+            <p class="forecast-condition">{{ day.condition }}</p>
+            <p class="forecast-rain">Lluvia {{ day.precipitationProbability }}%</p>
+          </article>
+        } @empty {
+          <p class="state">Sin pronóstico disponible.</p>
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Riesgo sísmico</h2>
+        <span class="material-symbols-outlined">crisis_alert</span>
+      </div>
+      @if (risk(); as prediction) {
+        <article class="risk-card" [attr.data-level]="prediction.riskLevel">
+          <div>
+            <p class="eyebrow">Zona {{ prediction.zone }}</p>
+            <h3>{{ riskLabel(prediction.riskLevel) }}</h3>
+            <p class="risk-probability">Probabilidad {{ (prediction.probability * 100).toFixed(0) }}%</p>
+          </div>
+          <div class="risk-source">
+            <p>{{ prediction.source }}</p>
+            <p>Vigente hasta {{ formatDate(prediction.validUntil) }}</p>
+          </div>
+        </article>
+      } @else {
+        <p class="state">Sin predicción disponible.</p>
+      }
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Sismos recientes</h2>
+        <span class="material-symbols-outlined">public</span>
+      </div>
+      <div class="quake-list">
+        @for (quake of earthquakes(); track quake.id) {
+          <article class="quake-card">
+            <div class="magnitude">{{ quake.magnitude.toFixed(1) }}</div>
+            <div class="quake-info">
+              <p class="quake-place">{{ quake.location }}</p>
+              <p class="quake-meta">
+                Profundidad {{ quake.depth.toFixed(0) }} km · {{ formatDate(quake.occurredAt) }}
+              </p>
+            </div>
+          </article>
+        } @empty {
+          <p class="state">No hay sismos recientes en el rango consultado.</p>
+        }
+      </div>
+    </section>
+  </main>
+
+  <app-bottom-nav />
+</div>

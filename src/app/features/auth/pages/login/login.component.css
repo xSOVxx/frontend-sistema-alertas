@@ -250,6 +250,19 @@ input:focus {
   color: #aec7f7;
 }
 
+.register-link {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+}
+
+.register-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 footer {
   margin-top: auto;
   padding: 24px 16px;

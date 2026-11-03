@@ -20,7 +20,7 @@
       </div>
       <div class="profile-info">
         <h1 class="profile-name">{{ userProfile().name }}</h1>
-        <p class="profile-location">{{ userProfile().location }}</p>
+        <p class="profile-location">{{ userProfile().location || 'Piura, Perú' }}</p>
       </div>
     </section>
 
@@ -71,6 +71,31 @@
       }
     </section>
   </main>
+
+  @if (isEditing()) {
+    <div class="modal-backdrop" (click)="closeEdit()">
+      <section class="edit-modal" (click)="$event.stopPropagation()">
+        <h2>Editar perfil</h2>
+        <form [formGroup]="editForm" (ngSubmit)="saveProfile()" novalidate>
+          <label class="field-label" for="editName">Nombre completo</label>
+          <input id="editName" type="text" formControlName="name" />
+
+          <label class="field-label" for="editPhone">Teléfono</label>
+          <input id="editPhone" type="tel" formControlName="phone" placeholder="999999999" />
+
+          <label class="field-label" for="editLocation">Ubicación</label>
+          <input id="editLocation" type="text" formControlName="location" placeholder="Piura, Perú" />
+
+          <div class="modal-actions">
+            <button type="button" class="secondary" (click)="closeEdit()">Cancelar</button>
+            <button type="submit" class="primary" [disabled]="saving() || editForm.invalid">
+              {{ saving() ? 'Guardando...' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  }
 
   <app-bottom-nav />
 </div>

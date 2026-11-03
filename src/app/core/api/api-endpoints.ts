@@ -1,6 +1,7 @@
 ﻿export const API_ENDPOINTS = {
   auth: {
     login: '/auth/login',
+    register: '/auth/register',
     logout: '/auth/logout',
     refresh: '/auth/refresh',
     forgotPassword: '/auth/forgot-password'
@@ -27,6 +28,18 @@
   },
   profile: {
     me: '/users/me'
+  },
+  tickets: {
+    catalog: '/tickets/catalog',
+    create: '/tickets',
+    track: (code: string) => `/tickets/track/${encodeURIComponent(code)}`,
+    mine: '/tickets/me',
+    list: '/tickets',
+    detail: (id: string) => `/tickets/${id}`,
+    update: (id: string) => `/tickets/${id}`,
+    comments: (id: string) => `/tickets/${id}/comments`,
+    metrics: '/tickets/metrics',
+    export: '/tickets/export'
   },
   weather: {
     current: '/weather/current',

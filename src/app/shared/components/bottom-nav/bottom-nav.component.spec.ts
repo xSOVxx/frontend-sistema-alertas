@@ -19,11 +19,11 @@ describe('BottomNavComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render four tabs', () => {
+  it('should render five tabs', () => {
     const fixture = TestBed.createComponent(BottomNavComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelectorAll('.nav-btn').length).toBe(4);
+    expect(compiled.querySelectorAll('.nav-btn').length).toBe(5);
   });
 
   it('should link to the Perfil route', () => {
@@ -43,6 +43,8 @@ describe('BottomNavComponent', () => {
     expect(anchors[0].getAttribute('href')).toBe('/feed');
     expect(anchors[1].getAttribute('href')).toBe('/mapa');
     expect(anchors[2].getAttribute('href')).toBe('/voluntariado');
+    expect(anchors[3].getAttribute('href')).toBe('/soporte');
+    expect(anchors[4].getAttribute('href')).toBe('/perfil');
   });
 
   it('should mark the active route', async () => {

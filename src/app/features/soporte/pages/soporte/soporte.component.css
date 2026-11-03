@@ -1,0 +1,368 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+.intro h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  line-height: 30px;
+}
+
+.intro p {
+  margin: 0;
+  color: var(--on-surface-variant);
+  font-size: 13px;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 18px 0 14px;
+  padding: 4px;
+  background: var(--surface-container);
+  border-radius: 10px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 9px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--on-surface-variant);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.alert {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: var(--error-bg);
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: var(--error);
+  font-size: 13px;
+}
+
+.card,
+.success-card {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card h2,
+.success-card h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.muted {
+  margin: 0;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--on-surface);
+}
+
+.catalog-card .material-symbols-outlined {
+  color: var(--primary);
+  font-size: 22px;
+}
+
+.catalog-card strong {
+  font-size: 13px;
+}
+
+.catalog-card small {
+  color: var(--on-surface-variant);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.catalog-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgb(30 58 138 / 12%);
+  background: #eff6ff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  color: var(--on-surface);
+  font: inherit;
+  font-size: 13px;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgb(30 58 138 / 12%);
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.primary,
+.secondary {
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.secondary {
+  margin-top: 10px;
+  background: var(--surface-container);
+  color: var(--primary);
+}
+
+.success-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.success-card > .material-symbols-outlined {
+  color: var(--success);
+  font-size: 30px;
+}
+
+.ticket-code {
+  margin: 4px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.ticket-card,
+.ticket-row {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface-container-lowest);
+}
+
+.ticket-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ticket-head h3,
+.ticket-row h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+}
+
+.status[data-status='NEW'] {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.status[data-status='IN_PROGRESS'],
+.status[data-status='ASSIGNED'] {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.status[data-status='RESOLVED'],
+.status[data-status='CLOSED'] {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.status[data-status='CANCELLED'] {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ticket-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.ticket-meta dt {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.ticket-meta dd {
+  margin: 2px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.timeline {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timeline li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.timeline .dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.timeline strong {
+  font-size: 12px;
+}
+
+.timeline p {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: var(--on-surface-variant);
+}
+
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ticket-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 0;
+}
+
+@media (max-width: 520px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
