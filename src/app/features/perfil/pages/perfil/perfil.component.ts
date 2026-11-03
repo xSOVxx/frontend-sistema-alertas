@@ -35,7 +35,14 @@ export class PerfilComponent {
 
   protected readonly menuItems = signal<ProfileMenuItem[]>([
     ...(this.session.isAdmin()
-      ? [{ icon: 'confirmation_number', label: 'Bandeja de tickets', action: 'admin-tickets' }]
+      ? [
+          { icon: 'confirmation_number', label: 'Bandeja de tickets', action: 'admin-tickets' },
+          { icon: 'monitoring', label: 'Métricas del sistema', action: 'admin-metrics' },
+          { icon: 'inventory_2', label: 'Control de ayuda humanitaria', action: 'admin-resources' }
+        ]
+      : []),
+    ...(this.session.isVolunteer()
+      ? [{ icon: 'volunteer_activism', label: 'Panel de voluntario', action: 'volunteer-panel' }]
       : []),
     { icon: 'edit', label: 'Editar Perfil', action: 'edit' },
     { icon: 'support_agent', label: 'Ayuda y Soporte', action: 'support' },
@@ -77,6 +84,15 @@ export class PerfilComponent {
         break;
       case 'admin-tickets':
         void this.router.navigate(['/admin/tickets']);
+        break;
+      case 'admin-metrics':
+        void this.router.navigate(['/admin/metrics']);
+        break;
+      case 'admin-resources':
+        void this.router.navigate(['/admin/recursos']);
+        break;
+      case 'volunteer-panel':
+        void this.router.navigate(['/voluntario']);
         break;
       case 'about':
         void this.router.navigate(['/acerca-de']);

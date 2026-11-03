@@ -1,0 +1,123 @@
+<div class="page">
+  <app-topbar>
+    <span topbar-left class="topbar-brand">
+      <span class="material-symbols-outlined">monitoring</span>
+      Métricas del sistema
+    </span>
+    <button topbar-right type="button" class="refresh-btn" (click)="load()" [disabled]="loading()">
+      <span class="material-symbols-outlined" [class.spin]="loading()">refresh</span>
+    </button>
+  </app-topbar>
+
+  <main class="main">
+    <div class="head">
+      <div>
+        <h1>Panel analítico</h1>
+        <p>Estado técnico, operación y soporte en tiempo real.</p>
+      </div>
+      @if (lastUpdated()) {
+        <span class="updated">Actualizado {{ lastUpdated() }}</span>
+      }
+    </div>
+
+    @if (error()) {
+      <p class="alert" role="alert">{{ error() }}</p>
+    }
+
+    @if (loading() && !metrics()) {
+      <p class="state">Cargando métricas...</p>
+    }
+
+    @if (metrics(); as m) {
+      <section class="status-row">
+        <span class="status-chip" [class.status-chip--down]="m.services.api !== 'up'">
+          <span class="dot"></span> API {{ m.services.api }}
+        </span>
+        <span class="status-chip" [class.status-chip--down]="m.services.database !== 'up'">
+          <span class="dot"></span> Base de datos {{ m.services.database }}
+        </span>
+        <span class="status-chip">Versión {{ m.version }}</span>
+        <span class="status-chip">Uptime {{ formatUptime(m.uptimeSeconds) }}</span>
+      </section>
+
+      <section class="section">
+        <h2>Rendimiento HTTP</h2>
+        <div class="cards">
+          <article class="card">
+            <span class="card-label">Peticiones totales</span>
+            <strong class="card-value">{{ m.http.totalRequests }}</strong>
+            <small>desde el último arranque</small>
+          </article>
+          <article class="card">
+            <span class="card-label">Latencia p95</span>
+            <strong class="card-value">{{ m.http.p95LatencyMs }} ms</strong>
+            <small>percentil 95</small>
+          </article>
+          <article class="card">
+            <span class="card-label">Errores 5xx</span>
+            <strong class="card-value" [class.danger]="m.http.errors5xx > 0">{{ m.http.errors5xx }}</strong>
+            <small>{{ m.http.errorRatePercent }}% del total</small>
+          </article>
+          <article class="card">
+            <span class="card-label">Rate limit 429</span>
+            <strong class="card-value" [class.warning]="m.http.rateLimited > 0">{{ m.http.rateLimited }}</strong>
+            <small>peticiones protegidas</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Recursos del servidor</h2>
+        <div class="cards">
+          <article class="card">
+            <span class="card-label">Memoria RSS</span>
+            <strong class="card-value">{{ m.memory.rssMb }} MB</strong>
+            <small>residente</small>
+          </article>
+          <article class="card">
+            <span class="card-label">Heap usado</span>
+            <strong class="card-value">{{ m.memory.heapUsedMb }} MB</strong>
+            <small>de {{ m.memory.heapTotalMb }} MB</small>
+          </article>
+          <article class="card">
+            <span class="card-label">SLA de soporte</span>
+            <strong class="card-value">{{ m.business.slaCompliancePercent }}%</strong>
+            <div class="bar"><span [style.width.%]="m.business.slaCompliancePercent"></span></div>
+          </article>
+          <article class="card">
+            <span class="card-label">Resolución promedio</span>
+            <strong class="card-value">{{ m.business.averageResolutionHours }} h</strong>
+            <small>tickets resueltos</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Operación</h2>
+        <div class="cards">
+          <article class="card"><span class="card-label">Tickets abiertos</span><strong class="card-value">{{ m.business.ticketsOpen }}</strong></article>
+          <article class="card"><span class="card-label">Tickets resueltos</span><strong class="card-value">{{ m.business.ticketsResolved }}</strong></article>
+          <article class="card"><span class="card-label">Tickets totales</span><strong class="card-value">{{ m.business.ticketsTotal }}</strong></article>
+          <article class="card"><span class="card-label">Incidentes activos</span><strong class="card-value">{{ m.business.activeIncidents }}</strong></article>
+          <article class="card"><span class="card-label">Voluntarios pendientes</span><strong class="card-value warning">{{ m.business.pendingVolunteers }}</strong></article>
+          <article class="card"><span class="card-label">Voluntarios totales</span><strong class="card-value">{{ m.business.volunteersTotal }}</strong></article>
+          <article class="card"><span class="card-label">Ítems de inventario</span><strong class="card-value">{{ m.business.inventoryItems }}</strong></article>
+          <article class="card"><span class="card-label">Albergues</span><strong class="card-value">{{ m.business.shelters }}</strong></article>
+          <article class="card"><span class="card-label">Zonas inundables</span><strong class="card-value">{{ m.business.floodZones }}</strong></article>
+          <article class="card"><span class="card-label">Vías bloqueadas</span><strong class="card-value">{{ m.business.blockedRoads }}</strong></article>
+        </div>
+      </section>
+
+      <section class="help-card">
+        <h2>¿Cómo leer este panel?</h2>
+        <ul>
+          <li><strong>Errores 5xx:</strong> si suben, revisa logs del backend.</li>
+          <li><strong>p95:</strong> si supera 1.5 s, revisa base de datos y capacidad.</li>
+          <li><strong>429:</strong> indica que el rate limit está protegiendo el servicio.</li>
+          <li><strong>SLA:</strong> debe mantenerse sobre 90%.</li>
+          <li><strong>Voluntarios pendientes:</strong> requiere revisión del administrador.</li>
+        </ul>
+      </section>
+    }
+  </main>
+</div>

@@ -15,12 +15,26 @@
   },
   map: {
     shelters: '/map/shelters',
+    shelter: (id: string) => `/map/shelters/${id}`,
     blockedRoads: '/map/blocked-roads',
+    allBlockedRoads: '/map/blocked-roads/all',
+    blockedRoad: (id: string) => `/map/blocked-roads/${id}`,
     floodZones: '/map/flood-zones',
+    floodZone: (id: string) => `/map/flood-zones/${id}`,
     incidents: '/incidents'
   },
   volunteers: {
-    register: '/volunteers'
+    register: '/volunteers',
+    list: '/volunteers',
+    status: (id: string) => `/volunteers/${id}/status`
+  },
+  inventory: {
+    list: '/inventory',
+    create: '/inventory',
+    detail: (id: string) => `/inventory/${id}`
+  },
+  metrics: {
+    summary: '/metrics/summary'
   },
   resources: {
     stock: '/resources/stock',

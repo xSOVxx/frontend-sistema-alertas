@@ -49,9 +49,17 @@ export class SessionService {
     return !!this.accessToken;
   }
 
-  isAdmin(): boolean {
+  hasRole(role: string): boolean {
     const payload = this.tokenPayload();
-    return payload?.realm_access?.roles?.includes('ADMIN') ?? false;
+    return payload?.realm_access?.roles?.includes(role) ?? false;
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole('ADMIN');
+  }
+
+  isVolunteer(): boolean {
+    return this.hasRole('VOLUNTEER');
   }
 
   private tokenPayload(): { realm_access?: { roles?: string[] } } | null {

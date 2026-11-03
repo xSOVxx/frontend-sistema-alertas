@@ -1,6 +1,7 @@
 ﻿import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/guards/auth.guard';
 import { adminGuard } from './core/auth/guards/admin.guard';
+import { volunteerGuard } from './core/auth/guards/volunteer.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -58,6 +59,30 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/soporte/pages/admin-tickets/admin-tickets.component').then(
         (m) => m.AdminTicketsComponent
+      )
+  },
+  {
+    path: 'admin/metrics',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./features/admin/pages/admin-metrics/admin-metrics.component').then(
+        (m) => m.AdminMetricsComponent
+      )
+  },
+  {
+    path: 'admin/recursos',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./features/admin/pages/admin-resources/admin-resources.component').then(
+        (m) => m.AdminResourcesComponent
+      )
+  },
+  {
+    path: 'voluntario',
+    canActivate: [volunteerGuard],
+    loadComponent: () =>
+      import('./features/voluntario/pages/voluntario-panel/voluntario-panel.component').then(
+        (m) => m.VoluntarioPanelComponent
       )
   },
   {
