@@ -123,6 +123,27 @@ export class PerfilComponent {
       });
   }
 
+  protected formatJoinDate(value?: string): string {
+    if (!value) {
+      return 'No disponible';
+    }
+
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+      return value;
+    }
+
+    return date.toLocaleString('es-PE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'America/Lima'
+    });
+  }
+
   protected closeEdit(): void {
     this.isEditing.set(false);
   }
