@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type * as maplibregl from 'maplibre-gl';
 import { TopbarComponent, BottomNavComponent } from '@shared/index';
 import { environment } from '@env/environment';
+import { NetworkStatusService } from '@core/services/network-status.service';
 import { BlockedRoad, FloodZone, IncidentRequest, Shelter } from '../../models/mapa.model';
 import { MapaService } from '../../services/mapa.service';
 import { MapControlsComponent } from '../../components/map-controls/map-controls.component';
@@ -19,9 +20,11 @@ type StyleKind = 'base' | 'satellite';
 export class MapaComponent {
   private readonly mapaService = inject(MapaService);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly network = inject(NetworkStatusService);
 
   protected readonly mapError = signal(false);
   protected readonly loading = signal(true);
+  protected readonly reportMessage = signal<string | null>(null);
   protected readonly shelters = signal<Shelter[]>([]);
   protected readonly blockedRoads = signal<BlockedRoad[]>([]);
   protected readonly floodZones = signal<FloodZone[]>([]);
@@ -62,7 +65,7 @@ export class MapaComponent {
       },
       error: () => {
         this.loading.set(false);
-        this.mapError.set(true);
+        this.showReportMessage('No se pudieron cargar los datos del mapa.');
       }
     });
   }
@@ -259,9 +262,14 @@ export class MapaComponent {
 
   protected reportIncident(): void {
     if (!navigator.geolocation) {
-      this.mapError.set(true);
+      this.showReportMessage(
+        'Tu navegador no permite obtener la ubicación. La incidencia no se pudo enviar.',
+      );
       return;
     }
+
+    this.showReportMessage('Obteniendo tu ubicación...');
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const incident: IncidentRequest = {
@@ -270,12 +278,31 @@ export class MapaComponent {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         };
-        this.mapaService.reportIncident(incident).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-          error: () => this.mapError.set(true)
-        });
+        this.mapaService
+          .reportIncident(incident)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => this.showReportMessage('Incidencia reportada correctamente.'),
+            error: () =>
+              this.showReportMessage(
+                'No se pudo reportar la incidencia. Verifica tu conexión.',
+              )
+          });
       },
-      () => this.mapError.set(true),
+      () =>
+        this.showReportMessage(
+          'No se pudo obtener tu ubicación. Activa el GPS o los permisos del navegador.',
+        ),
       { timeout: 5000 }
     );
+  }
+
+  private showReportMessage(message: string): void {
+    this.reportMessage.set(message);
+    setTimeout(() => {
+      if (this.reportMessage() === message) {
+        this.reportMessage.set(null);
+      }
+    }, 4500);
   }
 }

@@ -1,14 +1,19 @@
 <div class="page">
   <app-topbar title="PonteAlerta Piura">
-    <button topbar-left class="topbar-btn" type="button" aria-label="Estado de conexión">
-      <span class="material-symbols-outlined">signal_wifi_4_bar</span>
-    </button>
+    <span topbar-left class="connection-state" [attr.data-offline]="!network.isOnline()">
+      <span class="material-symbols-outlined">
+        {{ network.isOnline() ? 'signal_wifi_4_bar' : 'signal_wifi_off' }}
+      </span>
+      {{ network.isOnline() ? 'En línea' : 'Sin conexión' }}
+    </span>
   </app-topbar>
 
-  <div class="offline-bar">
-    <span class="material-symbols-outlined filled">cloud_off</span>
-    <span class="offline-label">Modo Offline - Guardando Localmente</span>
-  </div>
+  @if (!network.isOnline()) {
+    <div class="offline-bar">
+      <span class="material-symbols-outlined filled">cloud_off</span>
+      <span class="offline-label">Modo Offline - Guardando Localmente</span>
+    </div>
+  }
 
   <main class="map-wrap">
     <div #canvas class="map-canvas"></div>
@@ -22,6 +27,10 @@
         <span class="material-symbols-outlined">error_outline</span>
         No se pudo cargar el mapa. Verifica tu conexión.
       </div>
+    }
+
+    @if (reportMessage()) {
+      <div class="report-toast" role="status">{{ reportMessage() }}</div>
     }
 
     <app-map-controls

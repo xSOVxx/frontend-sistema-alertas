@@ -32,6 +32,28 @@
   background: var(--surface-container-low);
 }
 
+.connection-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.connection-state[data-offline='true'] {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.connection-state .material-symbols-outlined {
+  font-size: 16px;
+}
+
 .offline-bar {
   display: flex;
   align-items: center;
@@ -71,6 +93,7 @@
 .map-error {
   position: absolute;
   inset: 0;
+  z-index: 900;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,6 +103,22 @@
   text-align: center;
   color: var(--on-surface-variant);
   background: var(--surface-container-low);
+}
+
+.report-toast {
+  position: absolute;
+  right: 16px;
+  bottom: 92px;
+  left: 76px;
+  z-index: 1001;
+  padding: 10px 14px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 10px;
+  background: rgb(15 23 42 / 88%);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: var(--shadow-lg);
 }
 
 .controls-overlay {
