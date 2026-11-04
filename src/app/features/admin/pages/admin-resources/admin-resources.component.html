@@ -24,6 +24,7 @@
       <button type="button" [class.active]="tab() === 'roads'" (click)="setTab('roads')">Vías</button>
       <button type="button" [class.active]="tab() === 'zones'" (click)="setTab('zones')">Zonas</button>
       <button type="button" [class.active]="tab() === 'volunteers'" (click)="setTab('volunteers')">Voluntarios</button>
+      <button type="button" [class.active]="tab() === 'incidents'" (click)="setTab('incidents')">Incidentes</button>
     </div>
 
     @if (error()) { <p class="alert" role="alert">{{ error() }}</p> }
@@ -149,6 +150,38 @@
                   <td class="actions"><button type="button" class="link" (click)="editZone(item)">Editar</button><button type="button" class="link danger" (click)="deleteZone(item)">Eliminar</button></td>
                 </tr>
               } @empty { <tr><td colspan="5" class="state">Sin zonas registradas.</td></tr> }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (tab() === 'incidents') {
+      <section class="panel">
+        <div class="panel-head"><h2>Incidentes de emergencia</h2></div>
+        <p class="panel-hint">Los incidentes activos también se muestran como marcadores rojos en el mapa para administradores.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Ubicación</th><th>Origen</th><th>Estado</th><th></th></tr></thead>
+            <tbody>
+              @for (item of incidents(); track item.id) {
+                <tr>
+                  <td>{{ formatDate(item.createdAt) }}</td>
+                  <td>{{ incidentTypeLabel(item.type) }}</td>
+                  <td>{{ item.description }}</td>
+                  <td>{{ item.latitude }}, {{ item.longitude }}</td>
+                  <td>{{ item.source }}</td>
+                  <td><span class="badge" [attr.data-status]="item.status">{{ item.status === 'ACTIVE' ? 'Activo' : 'Resuelto' }}</span></td>
+                  <td class="actions">
+                    @if (item.status === 'ACTIVE') {
+                      <button type="button" class="link" (click)="changeIncidentStatus(item, 'RESOLVED')">Resolver</button>
+                    } @else {
+                      <button type="button" class="link" (click)="changeIncidentStatus(item, 'ACTIVE')">Reactivar</button>
+                    }
+                    <button type="button" class="link danger" (click)="deleteIncident(item)">Eliminar</button>
+                  </td>
+                </tr>
+              } @empty { <tr><td colspan="7" class="state">Sin incidentes registrados.</td></tr> }
             </tbody>
           </table>
         </div>

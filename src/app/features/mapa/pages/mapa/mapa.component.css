@@ -200,3 +200,31 @@
   font-size: 18px;
   font-weight: 700;
 }
+
+.map-incident {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #dc2626;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.18);
+  animation: incidentPulse 1.8s ease-in-out infinite;
+}
+
+.map-incident .material-symbols-outlined {
+  font-size: 20px;
+}
+
+@keyframes incidentPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(220 38 38 / 35%);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgb(220 38 38 / 0%);
+  }
+}

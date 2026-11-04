@@ -96,6 +96,13 @@
   font-size: 17px;
 }
 
+.panel-hint {
+  margin: -6px 0 12px;
+  color: var(--on-surface-variant);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -251,9 +258,15 @@ tr:last-child td {
   color: #b45309;
 }
 
-.badge[data-status='REJECTED'] {
+.badge[data-status='REJECTED'],
+.badge[data-status='RESOLVED'] {
   background: #fef2f2;
   color: #b91c1c;
+}
+
+.badge[data-status='ACTIVE'] {
+  background: #fffbeb;
+  color: #b45309;
 }
 
 .alert,

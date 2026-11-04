@@ -30,6 +30,17 @@ export interface IncidentRequest {
   imageUrl?: string;
 }
 
+export interface IncidentMarker {
+  id: string;
+  description: string;
+  type: string;
+  status: 'ACTIVE' | 'RESOLVED';
+  source: string;
+  latitude: number;
+  longitude: number;
+  createdAt: string;
+}
+
 export interface MapData {
   shelters: Shelter[];
   blockedRoads: BlockedRoad[];

@@ -5,6 +5,7 @@ import { environment } from '@env/environment';
 import { API_ENDPOINTS } from '@core/api/api-endpoints';
 import {
   FloodZone,
+  Incident,
   InventoryItem,
   MetricsSummary,
   RoadBlockade,
@@ -94,6 +95,21 @@ export class AdminService {
     return this.http.patch<Volunteer>(this.url(API_ENDPOINTS.volunteers.status(id)), {
       status
     });
+  }
+
+  getIncidents(status?: string): Observable<Incident[]> {
+    const query = status ? `?status=${status}` : '';
+    return this.http.get<Incident[]>(this.url(`${API_ENDPOINTS.incidents.admin}${query}`));
+  }
+
+  updateIncidentStatus(id: string, status: 'ACTIVE' | 'RESOLVED'): Observable<Incident> {
+    return this.http.patch<Incident>(this.url(API_ENDPOINTS.incidents.update(id)), {
+      status
+    });
+  }
+
+  deleteIncident(id: string): Observable<void> {
+    return this.http.delete<void>(this.url(API_ENDPOINTS.incidents.remove(id)));
   }
 
   private url(endpoint: string): string {

@@ -1,9 +1,16 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { API_ENDPOINTS } from '@core/api/api-endpoints';
-import { BlockedRoad, FloodZone, IncidentRequest, MapData, Shelter } from '../models/mapa.model';
+import {
+  BlockedRoad,
+  FloodZone,
+  IncidentMarker,
+  IncidentRequest,
+  MapData,
+  Shelter
+} from '../models/mapa.model';
 
 @Injectable({ providedIn: 'root' })
 export class MapaService {
@@ -20,6 +27,11 @@ export class MapaService {
 
   reportIncident(incident: IncidentRequest): Observable<void> {
     return this.http.post<void>(this.url(API_ENDPOINTS.map.incidents), incident);
+  }
+
+  getAdminIncidents(status = 'ACTIVE'): Observable<IncidentMarker[]> {
+    const params = new HttpParams().set('status', status);
+    return this.http.get<IncidentMarker[]>(this.url(API_ENDPOINTS.incidents.admin), { params });
   }
 
   private url(endpoint: string): string {

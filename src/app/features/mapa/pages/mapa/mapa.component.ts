@@ -4,7 +4,14 @@ import type * as maplibregl from 'maplibre-gl';
 import { TopbarComponent, BottomNavComponent } from '@shared/index';
 import { environment } from '@env/environment';
 import { NetworkStatusService } from '@core/services/network-status.service';
-import { BlockedRoad, FloodZone, IncidentRequest, Shelter } from '../../models/mapa.model';
+import { SessionService } from '@core/auth/services/session.service';
+import {
+  BlockedRoad,
+  FloodZone,
+  IncidentMarker,
+  IncidentRequest,
+  Shelter
+} from '../../models/mapa.model';
 import { MapaService } from '../../services/mapa.service';
 import { MapControlsComponent } from '../../components/map-controls/map-controls.component';
 import { MapLegendComponent } from '../../components/map-legend/map-legend.component';
@@ -21,6 +28,7 @@ export class MapaComponent {
   private readonly mapaService = inject(MapaService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly network = inject(NetworkStatusService);
+  private readonly session = inject(SessionService);
 
   protected readonly mapError = signal(false);
   protected readonly loading = signal(true);
@@ -28,6 +36,7 @@ export class MapaComponent {
   protected readonly shelters = signal<Shelter[]>([]);
   protected readonly blockedRoads = signal<BlockedRoad[]>([]);
   protected readonly floodZones = signal<FloodZone[]>([]);
+  protected readonly incidents = signal<IncidentMarker[]>([]);
 
   @ViewChild('canvas')
   private readonly canvas?: ElementRef<HTMLDivElement>;
@@ -36,6 +45,7 @@ export class MapaComponent {
   private map?: maplibregl.Map;
   private styleKind: StyleKind = 'base';
   private markersAdded = false;
+  private incidentMarkersAdded = false;
   private usingFallbackStyle = false;
   private destroyed = false;
 
@@ -49,6 +59,7 @@ export class MapaComponent {
       void this.initMap();
     });
     this.loadMapData();
+    this.loadAdminIncidents();
   }
 
   private loadMapData(): void {
@@ -68,6 +79,29 @@ export class MapaComponent {
         this.showReportMessage('No se pudieron cargar los datos del mapa.');
       }
     });
+  }
+
+  private loadAdminIncidents(): void {
+    if (!this.session.isAdmin()) {
+      return;
+    }
+
+    this.mapaService
+      .getAdminIncidents('ACTIVE')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (incidents) => {
+          this.incidents.set(
+            incidents.filter((incident) =>
+              this.isValidCoordinate(incident.latitude, incident.longitude)
+            )
+          );
+          if (this.map?.isStyleLoaded()) {
+            this.addIncidentMarkers();
+          }
+        },
+        error: () => undefined
+      });
   }
 
   private isValidCoordinate(lat: number, lng: number): boolean {
@@ -145,6 +179,7 @@ export class MapaComponent {
           this.addMarkers();
           this.markersAdded = true;
         }
+        this.addIncidentMarkers();
       });
     } catch (error) {
       console.error('Error del mapa:', error);
@@ -172,6 +207,16 @@ export class MapaComponent {
     return block;
   }
 
+  private buildIncidentElement(): HTMLElement {
+    const incident = document.createElement('div');
+    incident.className = 'map-incident';
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-outlined filled';
+    icon.textContent = 'emergency';
+    incident.appendChild(icon);
+    return incident;
+  }
+
   private addMarkers(): void {
     if (!this.ml || !this.map) {
       return;
@@ -190,6 +235,32 @@ export class MapaComponent {
         .setLngLat([road.lng, road.lat])
         .addTo(this.map!);
     });
+  }
+
+  private addIncidentMarkers(): void {
+    if (
+      !this.ml ||
+      !this.map ||
+      this.incidentMarkersAdded ||
+      !this.session.isAdmin() ||
+      this.incidents().length === 0
+    ) {
+      return;
+    }
+    const { Marker, Popup } = this.ml;
+
+    this.incidents().forEach((incident) => {
+      new Marker({ element: this.buildIncidentElement(), anchor: 'bottom' })
+        .setLngLat([incident.longitude, incident.latitude])
+        .setPopup(
+          new Popup({ offset: 28 }).setText(
+            `${incident.type} - ${incident.description}`
+          )
+        )
+        .addTo(this.map!);
+    });
+
+    this.incidentMarkersAdded = true;
   }
 
   private addZones(): void {

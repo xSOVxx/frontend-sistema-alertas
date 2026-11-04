@@ -44,6 +44,19 @@ export interface RoadBlockade {
   updatedAt: string;
 }
 
+export interface Incident {
+  id: string;
+  description: string;
+  type: string;
+  status: 'ACTIVE' | 'RESOLVED';
+  source: string;
+  latitude: number;
+  longitude: number;
+  metadata?: Record<string, unknown> | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Volunteer {
   id: string;
   nombre: string;

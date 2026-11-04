@@ -36,6 +36,11 @@
   metrics: {
     summary: '/metrics/summary'
   },
+  incidents: {
+    admin: '/incidents/admin',
+    update: (id: string) => `/incidents/${id}`,
+    remove: (id: string) => `/incidents/${id}`
+  },
   resources: {
     stock: '/resources/stock',
     goals: '/resources/goals'

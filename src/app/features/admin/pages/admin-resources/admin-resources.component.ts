@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { TopbarComponent } from '@shared/index';
 import {
   FloodZone,
+  Incident,
   InventoryItem,
   ItemCategory,
   RoadBlockade,
@@ -15,7 +16,7 @@ import {
 } from '../../models/admin.models';
 import { AdminService } from '../../services/admin.service';
 
-type AdminTab = 'inventory' | 'shelters' | 'roads' | 'zones' | 'volunteers';
+type AdminTab = 'inventory' | 'shelters' | 'roads' | 'zones' | 'volunteers' | 'incidents';
 
 @Component({
   selector: 'app-admin-resources',
@@ -38,6 +39,7 @@ export class AdminResourcesComponent {
   protected readonly roads = signal<RoadBlockade[]>([]);
   protected readonly zones = signal<FloodZone[]>([]);
   protected readonly volunteers = signal<Volunteer[]>([]);
+  protected readonly incidents = signal<Incident[]>([]);
 
   protected readonly editingInventoryId = signal<string | null>(null);
   protected readonly editingShelterId = signal<string | null>(null);
@@ -117,7 +119,8 @@ export class AdminResourcesComponent {
       shelters: this.adminService.getShelters(),
       roads: this.adminService.getAllRoads(),
       zones: this.adminService.getFloodZones(),
-      volunteers: this.adminService.getVolunteers()
+      volunteers: this.adminService.getVolunteers(),
+      incidents: this.adminService.getIncidents()
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -127,6 +130,7 @@ export class AdminResourcesComponent {
           this.roads.set(data.roads);
           this.zones.set(data.zones);
           this.volunteers.set(data.volunteers);
+          this.incidents.set(data.incidents);
           this.loading.set(false);
         },
         error: () => {
@@ -320,6 +324,46 @@ export class AdminResourcesComponent {
         },
         error: () => this.error.set('No se pudo actualizar el voluntario.')
       });
+  }
+
+  protected changeIncidentStatus(
+    incident: Incident,
+    status: 'ACTIVE' | 'RESOLVED'
+  ): void {
+    this.adminService
+      .updateIncidentStatus(incident.id, status)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.showSuccess(
+            status === 'RESOLVED'
+              ? 'Incidencia marcada como resuelta'
+              : 'Incidencia reactivada'
+          );
+          this.loadAll();
+        },
+        error: () => this.error.set('No se pudo actualizar la incidencia.')
+      });
+  }
+
+  protected deleteIncident(incident: Incident): void {
+    if (!confirm('¿Eliminar esta incidencia?')) return;
+    this.runDelete(
+      this.adminService.deleteIncident(incident.id),
+      'Incidencia eliminada'
+    );
+  }
+
+  protected incidentTypeLabel(type: string): string {
+    const labels: Record<string, string> = {
+      FLOOD: 'Inundación',
+      EARTHQUAKE: 'Sismo',
+      LANDSLIDE: 'Deslizamiento',
+      ROAD_CLOSURE: 'Vía cerrada',
+      REFUGE: 'Refugio',
+      OTHER: 'Otro'
+    };
+    return labels[type] ?? type;
   }
 
   protected statusLabel(status: VolunteerStatus): string {
