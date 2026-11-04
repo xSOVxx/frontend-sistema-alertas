@@ -33,6 +33,7 @@ export class RegisterComponent {
   protected readonly hidePassword = signal(true);
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly policyModal = signal<'privacy' | 'sensitive' | null>(null);
 
   protected readonly registerForm = new FormGroup(
     {
@@ -45,7 +46,11 @@ export class RegisterComponent {
         Validators.pattern(/[A-Z]/),
         Validators.pattern(PASSWORD_SPECIAL)
       ]),
-      confirmPassword: new FormControl('', [Validators.required])
+      confirmPassword: new FormControl('', [Validators.required]),
+      acceptPolicies: new FormControl(false, {
+        nonNullable: true,
+        validators: [Validators.requiredTrue]
+      })
     },
     { validators: passwordMatch }
   );
@@ -68,6 +73,21 @@ export class RegisterComponent {
 
   protected togglePassword(): void {
     this.hidePassword.update((value) => !value);
+  }
+
+  protected onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 9);
+    this.registerForm.controls.phone.setValue(digits, { emitEvent: false });
+    input.value = digits;
+  }
+
+  protected openPolicy(policy: 'privacy' | 'sensitive'): void {
+    this.policyModal.set(policy);
+  }
+
+  protected closePolicy(): void {
+    this.policyModal.set(null);
   }
 
   protected onSubmit(): void {

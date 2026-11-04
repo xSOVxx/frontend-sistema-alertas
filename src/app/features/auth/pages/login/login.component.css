@@ -212,7 +212,7 @@ input:focus {
   justify-content: center;
   gap: 8px;
   padding: 16px;
-  background: var(--primary-container);
+  background: var(--primary);
   border: none;
   border-radius: 4px;
   color: var(--on-primary);
@@ -225,7 +225,7 @@ input:focus {
 }
 
 .submit:hover {
-  background: var(--primary);
+  background: var(--primary-hover);
 }
 
 .submit:active {

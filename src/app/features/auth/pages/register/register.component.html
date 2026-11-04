@@ -51,7 +51,16 @@
             <span class="input-icon">
               <span class="material-symbols-outlined">phone</span>
             </span>
-            <input id="phone" type="tel" formControlName="phone" placeholder="999999999" autocomplete="tel" />
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="999999999"
+              autocomplete="tel-national"
+              inputmode="numeric"
+              maxlength="9"
+              (input)="onPhoneInput($event)"
+            />
           </div>
           @if (registerForm.controls.phone.touched && registerForm.controls.phone.invalid) {
             <p class="field-error">El teléfono debe tener 9 dígitos.</p>
@@ -102,6 +111,24 @@
           }
         </div>
 
+        <div class="policy-block">
+          <label class="policy-check">
+            <input type="checkbox" formControlName="acceptPolicies" />
+            <span>Acepto las políticas de privacidad y el manejo de datos sensibles.</span>
+          </label>
+          <div class="policy-links">
+            <button type="button" class="policy-link" (click)="openPolicy('privacy')">
+              Ver Política de Privacidad
+            </button>
+            <button type="button" class="policy-link" (click)="openPolicy('sensitive')">
+              Ver Manejo de Datos Sensibles
+            </button>
+          </div>
+          @if (registerForm.controls.acceptPolicies.touched && registerForm.controls.acceptPolicies.invalid) {
+            <p class="field-error">Debes aceptar las políticas para crear tu cuenta.</p>
+          }
+        </div>
+
         <div class="actions">
           <button class="submit" type="submit" [disabled]="registerForm.invalid || loading()">
             {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
@@ -127,4 +154,79 @@
       </p>
     </div>
   </footer>
+
+  @if (policyModal()) {
+    <div class="policy-backdrop" (click)="closePolicy()">
+      <section class="policy-modal" (click)="$event.stopPropagation()">
+        <button class="policy-close" type="button" aria-label="Cerrar" (click)="closePolicy()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+
+        @if (policyModal() === 'privacy') {
+          <h2>Política de Privacidad</h2>
+          <p>
+            PonteAlerta Piura recopila únicamente los datos necesarios para gestionar
+            emergencias y brindarte atención: nombre, correo electrónico, teléfono,
+            ubicación y la información que registres en tus reportes.
+          </p>
+          <h3>¿Para qué usamos tus datos?</h3>
+          <ul>
+            <li>Registrar y atender solicitudes de ayuda.</li>
+            <li>Contactarte ante una emergencia o para dar seguimiento a tu caso.</li>
+            <li>Enviar alertas y coordinaciones de Defensa Civil y voluntarios.</li>
+            <li>Mejorar la seguridad y el funcionamiento de la aplicación.</li>
+          </ul>
+          <h3>¿Con quién se comparten?</h3>
+          <p>
+            Solo con el personal autorizado del COER, Defensa Civil y brigadas de
+            voluntarios cuando sea necesario para atender tu solicitud. No vendemos
+            ni cedemos tus datos a terceros con fines comerciales.
+          </p>
+          <h3>Tus derechos</h3>
+          <p>
+            Puedes solicitar acceso, rectificación, cancelación u oposición al
+            tratamiento de tus datos personales conforme a la Ley N.° 29733, Ley de
+            Protección de Datos Personales, a través del canal de soporte de la
+            aplicación.
+          </p>
+          <h3>Conservación</h3>
+          <p>
+            Los datos se conservan el tiempo necesario para la atención de la
+            emergencia y el cumplimiento de obligaciones legales. Luego se eliminan o
+            anonimizan de forma segura.
+          </p>
+        } @else {
+          <h2>Manejo de Datos Sensibles</h2>
+          <p>
+            Los datos de contacto y ubicación son considerados información sensible
+            dentro de PonteAlerta. Aplicamos medidas técnicas y organizativas para
+            protegerlos.
+          </p>
+          <h3>Medidas aplicadas</h3>
+          <ul>
+            <li>Teléfono, ubicación y datos de contacto se cifran con AES-256-GCM en la base de datos.</li>
+            <li>Las contraseñas no se almacenan en texto plano: Keycloak las protege con hash.</li>
+            <li>El acceso a datos de contacto de incidentes está restringido al rol ADMIN.</li>
+            <li>Las comunicaciones deben realizarse mediante HTTPS en producción.</li>
+            <li>El acceso a la base de datos está limitado a personal autorizado.</li>
+          </ul>
+          <h3>Uso de los datos sensibles</h3>
+          <p>
+            La información de contacto y ubicación se usa exclusivamente para
+            localizar a personas afectadas, coordinar ayuda humanitaria y dar
+            seguimiento a los reportes. No se muestra en las vistas públicas.
+          </p>
+          <h3>Seguridad y responsabilidad</h3>
+          <p>
+            El personal con acceso a estos datos tiene deber de confidencialidad. Si
+            detectas un uso indebido, repórtalo a través del módulo de soporte.
+          </p>
+        }
+
+        <button class="policy-understood" type="button" (click)="closePolicy()">
+          Entendido
+        </button>
+      </section>
+    </div>
+  }
 </div>
