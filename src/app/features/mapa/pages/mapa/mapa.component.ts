@@ -273,7 +273,7 @@ export class MapaComponent {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const incident: IncidentRequest = {
-          type: 'general',
+          type: 'OTHER',
           description: 'Incidencia reportada desde el mapa',
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
